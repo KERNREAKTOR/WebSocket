@@ -830,7 +830,8 @@ Public Class Form1
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        ToggleDarkMode()
+        Dim update As New Updater
+        update.ShowDialog()
     End Sub
 
     Private Sub LlModelLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LlModelLink.LinkClicked

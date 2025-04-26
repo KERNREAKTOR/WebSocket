@@ -256,6 +256,7 @@ Partial Class Form1
         ImageList1.Images.SetKeyName(2, "attach_money_24dp_434343_FILL0_wght400_GRAD0_opsz24.png")
         ImageList1.Images.SetKeyName(3, "person_add_24dp_434343_FILL0_wght400_GRAD0_opsz24.png")
         ImageList1.Images.SetKeyName(4, "account_circle_48dp_434343.png")
+        ImageList1.Images.SetKeyName(5, "system_update_alt_48dp_434343 (1).png")
         ' 
         ' GroupBox3
         ' 

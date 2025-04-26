@@ -25,7 +25,11 @@ Partial Class Updater
         TableLayoutPanel1 = New TableLayoutPanel()
         OK_Button = New Button()
         Cancel_Button = New Button()
+        GroupBox1 = New GroupBox()
+        LVersion = New Label()
+        LChangeLog = New Label()
         TableLayoutPanel1.SuspendLayout()
+        GroupBox1.SuspendLayout()
         SuspendLayout()
         ' 
         ' TableLayoutPanel1
@@ -36,7 +40,7 @@ Partial Class Updater
         TableLayoutPanel1.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 50F))
         TableLayoutPanel1.Controls.Add(OK_Button, 0, 0)
         TableLayoutPanel1.Controls.Add(Cancel_Button, 1, 0)
-        TableLayoutPanel1.Location = New Point(323, 316)
+        TableLayoutPanel1.Location = New Point(253, 316)
         TableLayoutPanel1.Margin = New Padding(4, 3, 4, 3)
         TableLayoutPanel1.Name = "TableLayoutPanel1"
         TableLayoutPanel1.RowCount = 1
@@ -64,28 +68,62 @@ Partial Class Updater
         Cancel_Button.TabIndex = 1
         Cancel_Button.Text = "Abbrechen"
         ' 
-        ' Dialog1
+        ' GroupBox1
+        ' 
+        GroupBox1.Controls.Add(LChangeLog)
+        GroupBox1.Controls.Add(LVersion)
+        GroupBox1.Location = New Point(12, 12)
+        GroupBox1.Name = "GroupBox1"
+        GroupBox1.Size = New Size(411, 159)
+        GroupBox1.TabIndex = 1
+        GroupBox1.TabStop = False
+        GroupBox1.Text = "Updateinformationen"
+        ' 
+        ' LVersion
+        ' 
+        LVersion.AutoSize = True
+        LVersion.Location = New Point(6, 19)
+        LVersion.Name = "LVersion"
+        LVersion.Size = New Size(41, 15)
+        LVersion.TabIndex = 0
+        LVersion.Text = "Label1"
+        ' 
+        ' LChangeLog
+        ' 
+        LChangeLog.AutoSize = True
+        LChangeLog.Location = New Point(6, 34)
+        LChangeLog.Name = "LChangeLog"
+        LChangeLog.Size = New Size(41, 15)
+        LChangeLog.TabIndex = 1
+        LChangeLog.Text = "Label1"
+        ' 
+        ' Updater
         ' 
         AcceptButton = OK_Button
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Cancel_Button
-        ClientSize = New Size(507, 363)
+        ClientSize = New Size(437, 363)
+        Controls.Add(GroupBox1)
         Controls.Add(TableLayoutPanel1)
-        FormBorderStyle = FormBorderStyle.FixedDialog
         Margin = New Padding(4, 3, 4, 3)
         MaximizeBox = False
         MinimizeBox = False
-        Name = "Dialog1"
+        Name = "Updater"
         ShowInTaskbar = False
         StartPosition = FormStartPosition.CenterParent
         Text = "Check for Update"
         TableLayoutPanel1.ResumeLayout(False)
+        GroupBox1.ResumeLayout(False)
+        GroupBox1.PerformLayout()
         ResumeLayout(False)
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents OK_Button As System.Windows.Forms.Button
     Friend WithEvents Cancel_Button As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As GroupBox
+    Friend WithEvents LVersion As Label
+    Friend WithEvents LChangeLog As Label
 
 End Class
