@@ -44,9 +44,13 @@ Partial Class Form1
         PBGoal = New ProgressBar()
         ToolStrip1 = New ToolStrip()
         ToolStripButton1 = New ToolStripButton()
+        ToolStripButton2 = New ToolStripButton()
         PicBoxAvatar = New PictureBox()
         PicBoxStatus = New PictureBox()
         GroupBox4 = New GroupBox()
+        Label1 = New Label()
+        LlModelLink = New LinkLabel()
+        LFollower = New Label()
         LOnline = New Label()
         LCurStatus = New Label()
         Timer1 = New Timer(components)
@@ -79,7 +83,7 @@ Partial Class Form1
         lIncome.BorderStyle = BorderStyle.FixedSingle
         lIncome.Dock = DockStyle.Bottom
         lIncome.FlatStyle = FlatStyle.Popup
-        lIncome.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lIncome.Font = New Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         lIncome.Location = New Point(3, 494)
         lIncome.Name = "lIncome"
         lIncome.Size = New Size(281, 43)
@@ -89,9 +93,10 @@ Partial Class Form1
         ' lbIncome
         ' 
         lbIncome.Dock = DockStyle.Fill
+        lbIncome.DrawMode = DrawMode.OwnerDrawFixed
         lbIncome.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         lbIncome.FormattingEnabled = True
-        lbIncome.ItemHeight = 17
+        lbIncome.ItemHeight = 30
         lbIncome.Location = New Point(3, 19)
         lbIncome.Name = "lbIncome"
         lbIncome.Size = New Size(281, 475)
@@ -275,7 +280,7 @@ Partial Class Form1
         ' ToolStrip1
         ' 
         ToolStrip1.ImageScalingSize = New Size(24, 24)
-        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton1})
+        ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton1, ToolStripButton2})
         ToolStrip1.Location = New Point(0, 43)
         ToolStrip1.Name = "ToolStrip1"
         ToolStrip1.Size = New Size(778, 31)
@@ -290,6 +295,16 @@ Partial Class Form1
         ToolStripButton1.Name = "ToolStripButton1"
         ToolStripButton1.Size = New Size(28, 28)
         ToolStripButton1.Text = "ToolStripButton1"
+        ' 
+        ' ToolStripButton2
+        ' 
+        ToolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image
+        ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), Image)
+        ToolStripButton2.ImageTransparentColor = Color.Magenta
+        ToolStripButton2.Name = "ToolStripButton2"
+        ToolStripButton2.Size = New Size(28, 28)
+        ToolStripButton2.Text = "ToolStripButton2"
+        ToolStripButton2.ToolTipText = "Dark / Light Mode umschalten"
         ' 
         ' PicBoxAvatar
         ' 
@@ -316,6 +331,9 @@ Partial Class Form1
         ' 
         ' GroupBox4
         ' 
+        GroupBox4.Controls.Add(Label1)
+        GroupBox4.Controls.Add(LlModelLink)
+        GroupBox4.Controls.Add(LFollower)
         GroupBox4.Controls.Add(LOnline)
         GroupBox4.Dock = DockStyle.Left
         GroupBox4.Location = New Point(0, 74)
@@ -323,16 +341,48 @@ Partial Class Form1
         GroupBox4.Size = New Size(287, 233)
         GroupBox4.TabIndex = 6
         GroupBox4.TabStop = False
-        GroupBox4.Text = "Token Ranking"
+        GroupBox4.Text = "Modelinformationen"
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.Location = New Point(3, 61)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(180, 21)
+        Label1.TabIndex = 3
+        Label1.Text = "Besuche die Seite von "
+        ' 
+        ' LlModelLink
+        ' 
+        LlModelLink.AutoSize = True
+        LlModelLink.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LlModelLink.Location = New Point(3, 82)
+        LlModelLink.Name = "LlModelLink"
+        LlModelLink.Size = New Size(92, 21)
+        LlModelLink.TabIndex = 2
+        LlModelLink.TabStop = True
+        LlModelLink.Text = "LinkLabel1"
+        ' 
+        ' LFollower
+        ' 
+        LFollower.AutoSize = True
+        LFollower.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LFollower.Location = New Point(3, 40)
+        LFollower.Name = "LFollower"
+        LFollower.Size = New Size(22, 21)
+        LFollower.TabIndex = 1
+        LFollower.Text = "..."
         ' 
         ' LOnline
         ' 
         LOnline.AutoSize = True
+        LOnline.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LOnline.Location = New Point(3, 19)
         LOnline.Name = "LOnline"
-        LOnline.Size = New Size(41, 15)
+        LOnline.Size = New Size(22, 21)
         LOnline.TabIndex = 0
-        LOnline.Text = "Label1"
+        LOnline.Text = "..."
         ' 
         ' LCurStatus
         ' 
@@ -409,5 +459,9 @@ Partial Class Form1
     Friend WithEvents LCurStatus As Label
     Friend WithEvents LOnline As Label
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents LFollower As Label
+    Friend WithEvents ToolStripButton2 As ToolStripButton
+    Friend WithEvents LlModelLink As LinkLabel
+    Friend WithEvents Label1 As Label
 
 End Class

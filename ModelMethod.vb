@@ -1,41 +1,74 @@
-﻿Module ModelMethod
-    Public Sub CheckStatus(StripChat As StripchatDespatcher)
+﻿Imports System.IO
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
+
+Module ModelMethod
+    Public Function GetModelStatus(ShortStatus As String) As String
+        Select Case ShortStatus
+
+            Case "virtualPrivate" : Return "Virtuell Privat"
+
+            Case "public" : Return "Öffentlich"
+
+            Case "private" : Return "Privat"
+
+            Case "p2p" : Return "Cam 2 Cam"
+
+            Case "off" : Return "Offline"
+
+            Case "groupShow" : Return "Gruppen-Show"
+
+            Case "idle" : Return "Bald Live"
+
+            Case Else : Return "Unbekannt"
+
+        End Select
+    End Function
+    Public Sub CheckStatus(UserJson As String)
 
         Dim StatusChanged As Boolean = False
-        Dim info As New StatusInfo(StripChat.GetUserInformation.Id)
-        info.LoadStatusInfo()
+        Dim UserInfoInfo As New UserInfo(UserJson)
 
-        'Staus ändert sich
-        If info.CurStatus <> StripChat.GetUserInformation.Status Then
+        With UserInfoInfo.GetUserInfo
 
-            info.CurStatus = StripChat.GetUserInformation.Status
-            info.StatusChangedAt = DateTime.Now
-            FormatStatus($"{StripChat.GetUserInformation.Username} ist {StripChat.GetUserInformation.Status}")
-            StatusChanged = True
+            Dim info As New StatusInfo(.Id)
+            info.LoadStatusInfo()
 
-        End If
+            'Model Id festlegen
+            Form1.modelId = .Id
+            Form1.userName = .Username
 
-        'Onlinestatus ändert sich
-        If info.IsOnline <> StripChat.GetUserInformation.IsOnline Then
+            'Form1.SetModelStatus(.status)
 
-            info.IsOnline = StripChat.GetUserInformation.IsOnline
-            info.OnlineChangedAt = DateTime.Now
+            'Form1.lStatus.Text = $"{Form1.userName} - {Form1.PrivateModelStatus}"
 
-
-            If StripChat.GetUserInformation.IsOnline Then
-                FormatStatus($"{StripChat.GetUserInformation.Username} ist Online")
-            Else
-                FormatStatus($"{StripChat.GetUserInformation.Username} ist Offline")
+            'Status ändert sich
+            If info.CurStatus <> .Status Then
+                info.CurStatus = .Status
+                info.StatusChangedAt = DateTime.Now
+                FormatStatus($"{ .Username} ist { GetModelStatus(.Status)}")
+                StatusChanged = True
             End If
 
-            StatusChanged = True
+            'Onlinestatus ändert sich
+            If info.IsOnline <> .IsOnline Then
+                info.IsOnline = .IsOnline
+                info.OnlineChangedAt = DateTime.Now
+                StatusChanged = True
+                FormatStatus($"{ .username} hat sich {If(.IsOnline, "angemeldet", "abgemeldet")}")
+            End If
 
-        End If
+            Form1.lStatus.BackColor = If(.isOnline, Color.Green, Color.Red)
 
-        If StatusChanged Then
+            If StatusChanged Then
+                info.SaveStatusInfo(info)
+            End If
 
-            info.SaveStatusInfo(info)
+            'Follower ausgeben
+            Form1.LFollower.Text = $"{ .FavoritedCount:N0} Follower"
 
-        End If
+        End With
+
     End Sub
+
 End Module

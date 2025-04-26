@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/bin/Debug/net8.0-windows/Magick.NET-Q8-AnyCPU.dll
+/bin/Debug/net8.0-windows/Magick.NET.Core.dll
+/bin/Debug/net8.0-windows/Newtonsoft.Json.dll
+/bin/Debug/net8.0-windows/WebSocket.deps.json
+/bin/Debug/net8.0-windows/WebSocket.dll
+/bin/Debug/net8.0-windows/WebSocket.dll.config
+/bin/Debug/net8.0-windows/WebSocket.exe
+/bin/Debug/net8.0-windows/WebSocket.pdb
+/bin/Debug/net8.0-windows/WebSocket.runtimeconfig.json

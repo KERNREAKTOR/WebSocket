@@ -27,8 +27,11 @@ Public Class AddModel
             Next
 
         Else
+
             OK_Button.Enabled = False
+
         End If
+
     End Sub
 
     Private Sub BtnAddModel_Click(sender As Object, e As EventArgs) Handles BtnAddModel.Click

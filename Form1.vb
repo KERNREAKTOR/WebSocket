@@ -19,9 +19,9 @@ Public Class Form1
     Public ErrorCounts As Int32
     Public StatusCounts As Int32
     Public MessagesCounts As Int32
-    Private PrivateModelStatus As String
+    'Public PrivateModelStatus As String
 
-    Private serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket") ' Ersetze mit der echten URL
+    Private serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket")
 
     ' Liste zum Speichern der eindeutigen IDs
     Private uniqueIds As New HashSet(Of Long)
@@ -54,22 +54,22 @@ Public Class Form1
                             Case "unsubscribe"
                             Case "subscribe"
                                 errorId = 100
-
-
                             Case "id"
                                 errorId = 101
 
                                 wsId = item.Value
 
                             Case "connect"
+
                                 errorId = 102
+
                                 Dim client As String = item.Value("client")
                                 Dim version As String = item.Value("version")
                                 Dim ping As Int32 = item.Value("ping")
                                 Dim pong As Boolean = item.Value("pong")
                                 lbMessages.Items.Add($"Verbunden mit dem Client: {client}")
                                 lbMessages.Items.Add($"Version: {version}")
-                                lbMessages.Items.Add($"Ping: {ping}")
+                                lbMessages.Items.Add($"Ping: {ping} ms")
                                 FormatMessages($"Pong: {pong}")
 
                             Case "push"
@@ -83,67 +83,19 @@ Public Class Form1
                                     Case "modelStatusChanged@" & modelId
                                         errorId = 102
                                         ' JSON in Objekt umwandeln
-                                        Dim model As ModelStatus = ModelStatus.FromJson(jsonString)
+                                        'Dim model As ModelStatus = ModelStatus.FromJson(jsonString)
 
-                                        '##################
-                                        '# Status abrufen #
-                                        '##################
-                                        Dim currentStatus As String = "online" ' Beispielwert
-                                        Dim info As New StatusInfo(modelId)
-                                        info.LoadStatusInfo()
-                                        Dim statusChanged As Boolean = False
+                                        CheckStatus(JsonConvert.DeserializeObject(Of JObject)(jsonString)("push")("pub")("data")("model").ToString)
+                                        SetModelStatus(JsonConvert.DeserializeObject(Of JObject)(jsonString)("push")("pub")("data")("model")("status").ToString)
 
-                                        'Staus ändert sich
-                                        If info.CurStatus <> model.Status Then
+                                '###############
+                                '# userUpdated #
+                                '###############
 
-                                            info.CurStatus = model.Status
-                                            info.StatusChangedAt = DateTime.Now
-
-                                            FormatStatus($"{model.Username} ist {model.Status}")
-
-                                            statusChanged = True
-
-                                        End If
-
-                                        'Onlinestatus ändert sich
-                                        If info.IsOnline <> model.IsOnline Then
-
-                                            info.IsOnline = model.IsOnline
-                                            info.OnlineChangedAt = DateTime.Now
-
-                                            If model.IsOnline Then
-                                                FormatStatus($"{model.Username} ist Online")
-                                            Else
-                                                FormatStatus($"{model.Username} ist Offline")
-                                            End If
-
-                                            statusChanged = True
-
-                                        End If
-
-                                        If statusChanged Then
-
-                                            info.SaveStatusInfo(info)
-
-                                        End If
-
-
-                                        ' Falls erfolgreich geladen, in ListBox anzeigen
-                                        If model IsNot Nothing Then
-
-                                            PrivateModelStatus = model.Status
-                                            Me.Text = $"{model.Username} - {model.Status}"
-                                            lStatus.Text = $"{model.Username} - {model.Status}"
-                                            Dim Status As String = model.Status
-                                            SetModelStatus(Status)
-
-                                            If model.IsOnline Then
-                                                lStatus.BackColor = Color.Green
-                                            Else
-                                                lStatus.BackColor = Color.Red
-                                            End If
-
-                                        End If
+                                    Case "userUpdated@" & modelId
+                                        '{"push":{"channel":"userUpdated@168472333","pub":{"data":{"additionalData":{},"user":{"age":20,"amazonWishlist":"https://www.amazon.de/hz/wishlist/ls/NFK6EHMZ9OBS?ref_=wl_share","avatarStatus":"approved","avatarUrl":"https://static-cdn.strpst.com/avatars/1/0/2/102b757dcaa2ed015553d443f9af640a-full","avatarUrlThumb":"https://static-cdn.strpst.com/avatars/1/0/2/102b757dcaa2ed015553d443f9af640a-thumb","becomeKingThreshold":0,"birthDate":"2004-09-21","bodyType":"bodyTypeThin","broadcastGender":"group","broadcastServer":"","city":"","cityId":0,"country":"de","description":"","doP2p":true,"doPrivate":true,"doSpy":true,"domain":"","ethnicity":"ethnicityMixed","exclusivePrivateActivities":["doHandjob","doSexToys","doTittyFuck"],"eyeColor":"eyeColorGreen","favoritedCount":68949,"gender":"females","genderDoc":"female","groupRate":44,"hairColor":"hairColorBrown","hallOfFame":null,"hallOfFamePosition":0,"hasAdminBadge":false,"hasChatRestrictions":false,"hasVrDevice":false,"id":168472333,"interestedIn":"interestedInEverybody","interests":["bdsm","blowjob","hardcore","sex-toys","submission"],"is2d":false,"isAdmin":false,"isAgeHidden":false,"isApprovedModel":true,"isBlocked":false,"isBlurProfile":false,"isCam":false,"isDelayUnpublish":false,"isDeleted":false,"isDisableMlNonNude":false,"isDisplayedModel":true,"isExGreen":false,"isExtendedPersonsCount":false,"isExternalApp":false,"isGold":false,"isGreen":false,"isHd":false,"isHiddenFromTopModels":false,"isHideFromNonNude":false,"isHideFromNonNudeOnError":false,"isHls240p":false,"isLive":false,"isMainPersonCVCheckDisabled":false,"isMlNonNude":false,"isMobile":false,"isModel":true,"isNew":false,"isNonNude":false,"isNonNudeBlocked":false,"isOfflinePrivateAvailable":false,"isOnline":true,"isPornStar":false,"isPromo":false,"isRegular":false,"isStorePrivateRecordings":false,"isStorePublicRecordings":true,"isStudio":false,"isSupport":false,"isUltimate":false,"isUnThrottled":true,"isVr":false,"kingId":134373015,"languages":["en","de"],"login":"madelinexx","name":"Madeline ","offlineStatus":"Follow my twitter/ insta for updates ; yourfavbxmbo 💕 ALL MY LINKS ➡️ https://linktr.ee/mebeaxx","offlineStatusUpdatedAt":"2025-04-06T00:30:46Z","p2pMinDuration":3,"p2pMinimum":360,"p2pOfflineMinDuration":3,"p2pOfflineMinimum":360,"p2pRate":120,"p2pVoiceMinimum":180,"p2pVoiceRate":60,"previewUrl":"https://static-cdn.strpst.com/previews/d/2/7/d2747f983cd958286f24b31662ae27f7-full","previewUrlThumbBig":"https://static-cdn.strpst.com/previews/d/2/7/d2747f983cd958286f24b31662ae27f7-thumb-big","previewUrlThumbSmall":"https://static-cdn.strpst.com/previews/d/2/7/d2747f983cd958286f24b31662ae27f7-thumb-small","previousUsername":"","privateActivities":["doDeepThroat","doShower","doSpanking","doTopless"],"privateMinDuration":3,"privateMinimum":180,"privateOfflineMinDuration":3,"privateOfflineMinimum":180,"privateRate":60,"publicActivities":["doAhegao","doBlowjob","doDildoOrVibrator","doDoggyStyle","doEroticDance","doFlashing","doFootFetish","doOilShow","doOrgasm","doSmoking","doTwerk"],"publicRecordingsRate":150,"ratingPosition":0,"ratingPrivate":4.84211,"ratingPrivateUsers":38,"region":"","rulesAlreadyShownOnBroadcast":false,"rulesAlreadyShownOnRegistration":false,"showProfileTo":"all","showTokensTo":"models","snapshotServer":"","specifics":["specificsBigTits","specificPOV","specificShaven"],"spyMinimum":44,"spyRate":44,"status":"off","statusChangedAt":"2025-04-18T18:47:41Z","subculture":"subcultureBottom","ticketRate":60,"topBestPlace":0,"userRanking":null,"username":"madelinexx","wentIdleAt":"2025-04-18T18:46:39Z","whoCanChat":"registered"}},"offset":1}}}
+                                        CheckStatus(JsonConvert.DeserializeObject(Of JObject)(jsonString)("push")("pub")("data")("user").ToString)
+                                        SetModelStatus(JsonConvert.DeserializeObject(Of JObject)(jsonString)("push")("pub")("data")("user")("status").ToString)
 
                                 '################
                                 '#  ModelEvent  #
@@ -155,20 +107,22 @@ Public Class Form1
                                         Dim modelIds As JArray = item.Value("pub")("data")("modelIds")
                                         Dim accesMode As String = item.Value("pub")("data")("accessMode")
 
-
                                         For Each modelId As Integer In modelIds
 
                                             Dim userName As String
 
-                                            If modelId = 0 Then
 
-                                                userName = "***"
+                                            userName = If(modelId = 0, "***", GetUsername(modelId))
 
-                                            Else
+                                            'If modelId = 0 Then
 
-                                                userName = GetUsername(modelId)
+                                            '    userName = "***"
 
-                                            End If
+                                            'Else
+
+                                            '    userName = GetUsername(modelId)
+
+                                            'End If
 
                                             FormatMessages($"---> User: {userName} betritt den Raum ({accesMode})")
 
@@ -206,10 +160,6 @@ Public Class Form1
 
                                         End If
 
-
-
-
-
                                 '####################
                                 '#  newChatMessage  #
                                 '####################
@@ -218,6 +168,7 @@ Public Class Form1
                                         type = parsedJsonObject("push")("pub")("data")("message")("type").ToString()
 
                                         Select Case type
+
                                             Case "text"
                                                 '{"push":{"channel":"newChatMessage@172531274","pub":{"data":{"additionalData":{},"message":{"additionalData":{"isKing":false,"isKnight":false,"isStudioAdmin":false,"isStudioModerator":false},"cacheId":"67e7c9836866a","createdAt":"2025-03-29T10:20:51Z","details":{"body":"Wie groß bist du Baby","fanClubNumberMonthsOfSubscribed":0,"fanClubTier":null},"id":1827923455018602,"modelId":172531274,"type":"text","userData":{"hasAdminBadge":false,"hasVrDevice":false,"id":189794742,"isAdmin":false,"isBlocked":false,"isDeleted":false,"isExGreen":false,"isGreen":false,"isModel":false,"isOnline":true,"isRegular":false,"isStudio":false,"isSupport":false,"isUltimate":true,"userRanking":{"isEx":false,"league":"gold","level":42},"username":"FiratcanSecici"}}},"offset":104}}}
                                                 errorId = 106
@@ -374,13 +325,14 @@ Public Class Form1
 
     End Sub
 
-    Private Sub SetModelStatus(Status As String)
-
+    Public Sub SetModelStatus(Status As String)
+        Dim PrivateModelStatus As String
         Select Case Status
 
             Case "virtualPrivate"
 
                 ' Wenn der Status "virtualPrivate" ist, setzen Sie das Bild auf "Virtuell Privat"
+                PicBoxAvatar.Visible = False
                 With PicBoxStatus
                     .Visible = True
 
@@ -392,11 +344,13 @@ Public Class Form1
 
                 End With
 
+
                 PrivateModelStatus = "Virtuell Privat"
 
             Case "public"
 
                 ' Wenn der Status "public" ist, setzen Sie das Bild auf "Öffentlich"
+                PicBoxAvatar.Visible = True
                 With PicBoxStatus
 
                     .Visible = False
@@ -408,6 +362,7 @@ Public Class Form1
             Case "private"
 
                 ' Wenn der Status "p2p" ist, setzen Sie das Bild auf "Privat"
+                PicBoxAvatar.Visible = False
                 With PicBoxStatus
                     .Visible = True
 
@@ -424,6 +379,7 @@ Public Class Form1
             Case "p2p"
 
                 ' Wenn der Status "p2p" ist, setzen Sie das Bild auf "Cam 2 Cam"
+                PicBoxAvatar.Visible = False
                 With PicBoxStatus
                     .Visible = True
 
@@ -440,6 +396,7 @@ Public Class Form1
             Case "off"
 
                 ' Wenn der Status "off" ist, setzen Sie das Bild auf "Offline"
+                PicBoxAvatar.Visible = True
                 With PicBoxStatus
                     .Visible = False
                 End With
@@ -449,6 +406,7 @@ Public Class Form1
             Case "groupShow"
 
                 ' Wenn der Status "groupShow" ist, setzen Sie das Bild auf "Gruppen-Show"
+                PicBoxAvatar.Visible = False
                 With PicBoxStatus
                     .Visible = True
 
@@ -465,6 +423,7 @@ Public Class Form1
             Case "idle"
 
                 ' Wenn der Status "idle" ist, setzen Sie das Bild auf "Bald Live"
+                PicBoxAvatar.Visible = False
                 With PicBoxStatus
                     .Visible = True
                     Dim imageData As Byte() = My.Resources.idle
@@ -477,6 +436,7 @@ Public Class Form1
 
             Case Else
 
+                PicBoxAvatar.Visible = True
                 With PicBoxStatus
                     .Visible = False
                 End With
@@ -485,6 +445,9 @@ Public Class Form1
 
         End Select
 
+        Me.Text = $"Modelname: {userName} - Modelid: {modelId} - {PrivateModelStatus}"
+
+        lStatus.Text = $"{userName} - {PrivateModelStatus}"
     End Sub
 
     Private Async Function ListenForMessages() As Task
@@ -496,18 +459,6 @@ Public Class Form1
                 Dim result As WebSocketReceiveResult = Await wsClient.ReceiveAsync(receivedData, CancellationToken.None)
 
                 If result.MessageType = WebSocketMessageType.Close Then
-
-                    'Dim serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket") ' Ersetze mit der echten URL
-                    'lbErrors.Items.Add("Verbindung geschlossen!")
-                    'Await wsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "Schließen", CancellationToken.None)
-                    'wsClient.Dispose()
-                    'wsClient = New ClientWebSocket()
-                    'Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
-                    'InitializeWebSocketConnection()
-
-                    'Dim serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket") ' Ersetze mit der echten URL
-
-                    'Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
 
                     InitializeWebSocketConnection()
 
@@ -522,6 +473,17 @@ Public Class Form1
             Catch ex As Exception
 
                 FormatErrors("Fehler beim Empfangen: " & ex.Message)
+
+                ' Prüfe auf diesen spezifischen Fehlertext oder Code
+                If ex.Message.Contains("without completing the close handshake") Then
+
+                    ' Wenn der Fehler auftritt, versuchen Sie, die Verbindung wiederherzustellen
+                    FormatErrors("Versuche neu zu verbinden...")
+
+                    ' Neu verbinden
+                    VerbindeWebSocketNeu()
+
+                End If
 
             End Try
         End While
@@ -557,6 +519,7 @@ Public Class Form1
 
         Try
             Dim manager As New DownloadManager()
+
             If Not My.Settings.CurModelName = "" Then
                 userName = My.Settings.CurModelName
             End If
@@ -565,10 +528,13 @@ Public Class Form1
             Dim jsonStringCam As String = manager.DownloadJsonAsync(urlCam)
             Dim Stripchat As New StripchatDespatcher(jsonStringCam)
 
-            CheckOnline(Stripchat)
+            'CheckOnline(Stripchat)
             UpdateGoalStatus(Stripchat)
 
             modelId = Stripchat.GetUserInformation.Id
+            LlModelLink.Text = Stripchat.GetUserInformation.Username
+
+            'LFollower.Text = $"{Stripchat.GetUserInformation.FavoritedCount:N0} Follower"
 
             ranking.LoadFromFile()
 
@@ -576,9 +542,11 @@ Public Class Form1
 
             ImgLoader.LoadWebPImageAsync(Stripchat.GetUserInformation.PreviewUrlThumbBig, PicBoxAvatar)
 
-            CheckStatus(Stripchat)
+            'Dim jsonCamObject As JObject = JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)("user")("user")
 
-            Me.Text = $"Modelname: {userName} - Modelid: {modelId} - {PrivateModelStatus}"
+            'GetUserInformation = New StripChatUserInfo(jsonCamObject("user").ToString())
+
+            CheckStatus(JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)("user")("user").ToString)
 
             Dim RankNumber As Int32 = 1
 
@@ -595,10 +563,11 @@ Public Class Form1
                 lIncome.Text = $"{intToken} Token ({Math.Round(intToken * 0.05, 2):F2} $)"
 
             End If
+
             Timer1.Enabled = True
 
             SetModelStatus(Stripchat.GetUserInformation.Status)
-            lStatus.Text = $"{userName} - {PrivateModelStatus}"
+
             wsClient = New ClientWebSocket()
 
             'Dim serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket") ' Ersetze mit der echten URL
@@ -613,6 +582,31 @@ Public Class Form1
 
             FormatErrors(ex.Message)
 
+            ' Prüfe auf diesen spezifischen Fehlertext oder Code
+            If ex.Message.Contains("without completing the close handshake") Then
+                FormatErrors("Versuche neu zu verbinden...")
+
+                ' Neu verbinden
+                VerbindeWebSocketNeu()
+            End If
+        End Try
+    End Sub
+    Private Async Sub VerbindeWebSocketNeu()
+        ' Trenne ggf. vorherige Verbindung
+        wsClient?.Dispose()
+
+        ' Neue Verbindung aufbauen
+        wsClient = New ClientWebSocket()
+
+        Try
+            Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
+            ' Starte erneut Empfang
+            InitializeWebSocketConnection()
+
+            Await ListenForMessages()
+            FormatErrors("Wiederverbinden war erfolgreich")
+        Catch ex As Exception
+            FormatErrors("Fehler beim Wiederverbinden: " & ex.Message)
         End Try
     End Sub
 
@@ -632,18 +626,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub CheckOnline(Stripchat As StripchatDespatcher)
-        If Stripchat.GetUserInformation.IsOnline Then
-
-            lStatus.BackColor = Color.Green
-
-        Else
-
-            lStatus.BackColor = Color.Red
-
-        End If
-    End Sub
-
     Private Sub InitializeWebSocketConnection()
 
         'SendMessage("{""connect"":{""token"":""eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiItNTk1NiIsImluZm8iOnsiaXNHdWVzdCI6dHJ1ZSwidXNlcklkIjotNTk1Nn19.wiw0qLpgg3_peIr6grrWU6Zjgu58wugE5fZHBiyX9_A"",""name"":""js""},""id"":1}")
@@ -652,7 +634,8 @@ Public Class Form1
         SendMessage(jsonCr.SubscribeNewChatMessage)
         SendMessage(jsonCr.SubscribeGoalChanged)
         SendMessage(jsonCr.SubscribeModelStatusChanged)
-        wsId = 4
+        SendMessage(jsonCr.SubscribeUserUpdated)
+        wsId = jsonCr.WebSocketId
 
     End Sub
 
@@ -705,31 +688,22 @@ Public Class Form1
             SendMessage(jsonCr.UnsubcribeNewChatMessage)
             SendMessage(jsonCr.UnsubcribeGoalChanged)
             SendMessage(jsonCr.UnsubcribeModelStatusChanged)
-            wsId = wsId + 3
+            SendMessage(jsonCr.UnsubcribeUserUpdated)
+            wsId = wsId + 4
 
             modelId = Stripchat.GetUserInformation.Id
             jsonCr = New JsonCreator(modelId, wsId)
             SendMessage(jsonCr.SubscribeNewChatMessage)
             SendMessage(jsonCr.SubscribeGoalChanged)
             SendMessage(jsonCr.SubscribeModelStatusChanged)
+            SendMessage(jsonCr.SubscribeUserUpdated)
 
             My.Settings.CurModelName = SelectedModel
             My.Settings.Save()
+            Dim JsonUser As JObject = JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)
 
-            CheckStatus(Stripchat)
-
+            CheckStatus(JsonUser("user")("user").ToString())
             SetModelStatus(Stripchat.GetUserInformation.Status)
-
-            If Stripchat.GetUserInformation.IsOnline Then
-
-                lStatus.BackColor = Color.Green
-
-            Else
-
-                lStatus.BackColor = Color.Red
-
-            End If
-
 
             If Stripchat.GetCameraInformation.GetGoalInfo.IsEnabled Then
 
@@ -745,7 +719,7 @@ Public Class Form1
 
             End If
 
-            modelId = Stripchat.GetUserInformation.Id
+            'modelId = Stripchat.GetUserInformation.Id
             ranking = New TipRanking()
 
             ranking.LoadFromFile()
@@ -754,7 +728,8 @@ Public Class Form1
 
             ImgLoader.LoadWebPImageAsync(Stripchat.GetUserInformation.PreviewUrlThumbBig, PicBoxAvatar)
 
-            Me.Text = $"Modelname: {userName} - Modelid: {modelId} - {PrivateModelStatus}"
+            'Me.Text = $"Modelname: {userName} - Modelid: {modelId} - {PrivateModelStatus}"
+            LlModelLink.Text = userName
 
             Dim RankNumber As Int32 = 1
 
@@ -772,12 +747,36 @@ Public Class Form1
 
             End If
 
-            SetModelStatus(Stripchat.GetUserInformation.Status)
-            lStatus.Text = $"{userName} - {PrivateModelStatus}"
-
         End If
     End Sub
 
+    Private isDarkMode As Boolean = False
+
+    Private Sub ToggleDarkMode()
+        If isDarkMode Then
+            ' ☀️ Light Mode aktivieren
+            Me.BackColor = Color.White
+            Me.ForeColor = Color.Black
+
+            For Each ctrl As Control In Me.Controls
+                ctrl.BackColor = Color.White
+                ctrl.ForeColor = Color.Black
+            Next
+
+            isDarkMode = False
+        Else
+            ' 🌙 Dark Mode aktivieren
+            Me.BackColor = Color.FromArgb(30, 30, 30)
+            Me.ForeColor = Color.White
+
+            For Each ctrl As Control In Me.Controls
+                ctrl.BackColor = Color.FromArgb(45, 45, 45)
+                ctrl.ForeColor = Color.White
+            Next
+
+            isDarkMode = True
+        End If
+    End Sub
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Dim info As New StatusInfo(modelId)
         info.LoadStatusInfo()
@@ -799,7 +798,43 @@ Public Class Form1
 
     End Sub
 
-    Private Sub PicBoxStatus_Click(sender As Object, e As EventArgs) Handles PicBoxStatus.Click
+    Private Sub lbIncome_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lbIncome.DrawItem
+        If e.Index < 0 Then Exit Sub
 
+        e.DrawBackground()
+        Dim g As Graphics = e.Graphics
+        Dim text As String = lbIncome.Items(e.Index).ToString()
+
+        Dim badgeColor As Color = Color.Transparent
+
+        ' Top 3 farblich markieren
+        Select Case e.Index
+            Case 0 : badgeColor = Color.Gold
+            Case 1 : badgeColor = Color.Silver
+            Case 2 : badgeColor = Color.Peru  ' Bronze ähnlich
+        End Select
+
+        ' Badge zeichnen
+        If badgeColor <> Color.Transparent Then
+            Using b As New SolidBrush(badgeColor)
+                g.FillEllipse(b, e.Bounds.Left + 2, e.Bounds.Top + 5, 20, 20)
+            End Using
+        End If
+
+        ' Text zeichnen
+        Using textBrush As New SolidBrush(Color.Black)
+            g.DrawString(text, e.Font, textBrush, e.Bounds.Left + 28, e.Bounds.Top + 5)
+        End Using
+
+        e.DrawFocusRectangle()
+    End Sub
+
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        ToggleDarkMode()
+    End Sub
+
+    Private Sub LlModelLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LlModelLink.LinkClicked
+        Dim url As String = "https://de.strip.chat/" & LlModelLink.Text
+        Process.Start(New ProcessStartInfo(url) With {.UseShellExecute = True})
     End Sub
 End Class

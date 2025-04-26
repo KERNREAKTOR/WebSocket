@@ -8,6 +8,7 @@ Public Class JsonCreator
         IntModelId = ModelId
         IntWsId = wsId
     End Sub
+
     ReadOnly Property Connect As String
         Get
             IntWsId += 1
@@ -43,6 +44,34 @@ Public Class JsonCreator
             Dim jsonObj = New With {
             .subscribe = New With {
                 .channel = $"modelStatusChanged@{IntModelId}"
+            },
+            .id = IntWsId
+        }
+            Return JsonConvert.SerializeObject(jsonObj)
+        End Get
+    End Property
+
+    ReadOnly Property UnsubcribeUserUpdated As String
+        Get
+            IntWsId += 1
+
+            Dim jsonObj = New With {
+            .unsubscribe = New With {
+                .channel = $"userUpdated@{IntModelId}"
+            },
+            .id = IntWsId
+        }
+
+            Return JsonConvert.SerializeObject(jsonObj)
+        End Get
+    End Property
+
+    ReadOnly Property SubscribeUserUpdated As String
+        Get
+            IntWsId += 1
+            Dim jsonObj = New With {
+            .subscribe = New With {
+                .channel = $"userUpdated@{IntModelId}"
             },
             .id = IntWsId
         }
@@ -103,5 +132,14 @@ Public Class JsonCreator
         }
             Return JsonConvert.SerializeObject(jsonObj)
         End Get
+    End Property
+
+    Public Property WebSocketId As Integer
+        Get
+            Return IntWsId
+        End Get
+        Set(value As Integer)
+            IntWsId = value
+        End Set
     End Property
 End Class
