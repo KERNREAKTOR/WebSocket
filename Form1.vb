@@ -236,18 +236,12 @@ Public Class Form1
                 End If
             Next
 
-
-
             If jsonString = "{}" Then
-
                 SendMessage("{}")
-
             End If
 
             If Not intToken = 0 Then
-
                 lIncome.Text = $"{intToken} Token ({Math.Round(intToken * 0.05, 2):F2} $)"
-
             End If
 
         Catch ex As Exception
@@ -275,6 +269,27 @@ Public Class Form1
         FormatTips($"{user} hat {TokenAmount} Token gespendet")
 
 
+        ranking.AddTip(userId, user, TokenAmount)
+
+        ' Ranking abrufen und in ListBox anzeigen
+        lbIncome.Items.Clear()
+        For Each entry In ranking.GetRanking()
+
+            lbIncome.Items.Add($"{RankNumber}. {entry.TotalTips} Tokens - {entry.Username}")
+            intToken += entry.TotalTips
+            RankNumber += 1
+
+        Next
+
+        ranking.SaveToFile()
+    End Sub
+    Public Sub AddTips(user As String, userId As Int32, TokenAmount As Int32)
+
+        Dim RankNumber As Int16 = 1
+
+        intToken = 0
+
+        FormatTips($"{user} hat {TokenAmount} Token gespendet")
         ranking.AddTip(userId, user, TokenAmount)
 
         ' Ranking abrufen und in ListBox anzeigen

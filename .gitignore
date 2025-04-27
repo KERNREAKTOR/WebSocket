@@ -370,3 +370,4 @@ FodyWeavers.xsd
 /bin/Debug/net8.0-windows/WebSocket.exe
 /bin/Debug/net8.0-windows/WebSocket.pdb
 /bin/Debug/net8.0-windows/WebSocket.runtimeconfig.json
+/Resources/WebSocket.iss

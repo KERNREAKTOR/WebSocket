@@ -26,8 +26,8 @@ Partial Class Updater
         OK_Button = New Button()
         Cancel_Button = New Button()
         GroupBox1 = New GroupBox()
-        LVersion = New Label()
         LChangeLog = New Label()
+        LVersion = New Label()
         TableLayoutPanel1.SuspendLayout()
         GroupBox1.SuspendLayout()
         SuspendLayout()
@@ -40,7 +40,7 @@ Partial Class Updater
         TableLayoutPanel1.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 50F))
         TableLayoutPanel1.Controls.Add(OK_Button, 0, 0)
         TableLayoutPanel1.Controls.Add(Cancel_Button, 1, 0)
-        TableLayoutPanel1.Location = New Point(253, 316)
+        TableLayoutPanel1.Location = New Point(253, 124)
         TableLayoutPanel1.Margin = New Padding(4, 3, 4, 3)
         TableLayoutPanel1.Name = "TableLayoutPanel1"
         TableLayoutPanel1.RowCount = 1
@@ -74,19 +74,10 @@ Partial Class Updater
         GroupBox1.Controls.Add(LVersion)
         GroupBox1.Location = New Point(12, 12)
         GroupBox1.Name = "GroupBox1"
-        GroupBox1.Size = New Size(411, 159)
+        GroupBox1.Size = New Size(411, 61)
         GroupBox1.TabIndex = 1
         GroupBox1.TabStop = False
         GroupBox1.Text = "Updateinformationen"
-        ' 
-        ' LVersion
-        ' 
-        LVersion.AutoSize = True
-        LVersion.Location = New Point(6, 19)
-        LVersion.Name = "LVersion"
-        LVersion.Size = New Size(41, 15)
-        LVersion.TabIndex = 0
-        LVersion.Text = "Label1"
         ' 
         ' LChangeLog
         ' 
@@ -97,13 +88,22 @@ Partial Class Updater
         LChangeLog.TabIndex = 1
         LChangeLog.Text = "Label1"
         ' 
+        ' LVersion
+        ' 
+        LVersion.AutoSize = True
+        LVersion.Location = New Point(6, 19)
+        LVersion.Name = "LVersion"
+        LVersion.Size = New Size(41, 15)
+        LVersion.TabIndex = 0
+        LVersion.Text = "Label1"
+        ' 
         ' Updater
         ' 
         AcceptButton = OK_Button
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         CancelButton = Cancel_Button
-        ClientSize = New Size(437, 363)
+        ClientSize = New Size(437, 171)
         Controls.Add(GroupBox1)
         Controls.Add(TableLayoutPanel1)
         Margin = New Padding(4, 3, 4, 3)

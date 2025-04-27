@@ -4,6 +4,8 @@ Imports Newtonsoft.Json.Linq
 Public Class ModelStatus
     ' Eigenschaften für die wichtigsten Werte
     Public Property Id As Integer
+    Public Property PrivateRate As Integer
+    Public Property P2pRate As Integer
     Public Property FavoritedCount As Integer
     Public Property Username As String
     Public Property Status As String
@@ -31,6 +33,8 @@ Public Class ModelStatus
                 .BroadcastServer = modelData("broadcastServer").ToString(),
                 .IsLive = modelData("isLive"),
                 .Id = modelData("id"),
+                .P2pRate = modelData("p2pRate"),
+                .PrivateRate = modelData("privateRate"),
                 .FavoritedCount = modelData("favoritedCount"),
                 .Username = modelData("username").ToString(),
                 .WentIdleAt = modelData("wentIdleAt").ToString(),

@@ -44,10 +44,29 @@ Module ModelMethod
 
             'Status ändert sich
             If info.CurStatus <> .Status Then
+
+                Dim StatusDuration As TimeSpan = DateTime.Now - info.StatusChangedAt
+                Dim TotalMinutes As Integer = CInt(StatusDuration.TotalMinutes) + 1
+                Dim TKIncome As Integer
+                Dim UserName As String = info.CurStatus & info.StatusChangedAt.ToString("_yyyy_MM_dd_HH_mm")
+
+                Select Case info.CurStatus
+                    Case "private"
+
+                        TKIncome = TotalMinutes * .PrivateRate
+                        Form1.AddTips($"{UserName}", CInt(info.StatusChangedAt.ToString("yyyyMMddHH")), TKIncome)
+
+                    Case "p2p"
+                        TKIncome = TotalMinutes * .P2pRate
+                        Form1.AddTips($"{UserName}", CInt(info.StatusChangedAt.ToString("yyyyMMddHH")), TKIncome)
+
+                End Select
+
                 info.CurStatus = .Status
                 info.StatusChangedAt = DateTime.Now
                 FormatStatus($"{ .Username} ist { GetModelStatus(.Status)}")
                 StatusChanged = True
+
             End If
 
             'Onlinestatus ändert sich
