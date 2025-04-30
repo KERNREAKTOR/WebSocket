@@ -5,6 +5,8 @@ Public Class ModelStatus
     ' Eigenschaften für die wichtigsten Werte
     Public Property Id As Integer
     Public Property PrivateRate As Integer
+    Public Property RatingPosition As Integer
+    Public Property CurrPosition As Integer
     Public Property P2pRate As Integer
     Public Property FavoritedCount As Integer
     Public Property Username As String
@@ -29,27 +31,29 @@ Public Class ModelStatus
             Dim modelData As JObject = jsonObject("push")("pub")("data")("model")
 
             ' Objekt mit Daten füllen
-            Dim model As New ModelStatus With {
-                .BroadcastServer = modelData("broadcastServer").ToString(),
-                .IsLive = modelData("isLive"),
-                .Id = modelData("id"),
-                .P2pRate = modelData("p2pRate"),
-                .PrivateRate = modelData("privateRate"),
-                .FavoritedCount = modelData("favoritedCount"),
-                .Username = modelData("username").ToString(),
-                .WentIdleAt = modelData("wentIdleAt").ToString(),
-                .Status = modelData("status").ToString(),
-                .Age = modelData("age"),
-                .Country = modelData("country").ToString(),
-                .AvatarUrl = modelData("avatarUrl").ToString(),
-                .IsOnline = modelData("isOnline"),
-                .HairColor = modelData("hairColor").ToString(),
-                .EyeColor = modelData("eyeColor").ToString(),
-                .Languages = modelData("languages").ToObject(Of List(Of String))(),
-                .Interests = modelData("interests").ToObject(Of List(Of String))()
-            }
+            'Dim model As New ModelStatus With {
+            '    .BroadcastServer = modelData("broadcastServer").ToString(),
+            '    .IsLive = modelData("isLive"),
+            '    .Id = modelData("id"),
+            '    .P2pRate = modelData("p2pRate"),
+            '    .PrivateRate = modelData("privateRate"),
+            '    .RatingPosition = modelData("ratingPosition"),
+            '    .CurrPosition = modelData("currPosition"),
+            '    .FavoritedCount = modelData("favoritedCount"),
+            '    .Username = modelData("username").ToString(),
+            '    .WentIdleAt = modelData("wentIdleAt").ToString(),
+            '    .Status = modelData("status").ToString(),
+            '    .Age = modelData("age"),
+            '    .Country = modelData("country").ToString(),
+            '    .AvatarUrl = modelData("avatarUrl").ToString(),
+            '    .IsOnline = modelData("isOnline"),
+            '    .HairColor = modelData("hairColor").ToString(),
+            '    .EyeColor = modelData("eyeColor").ToString(),
+            '    .Languages = modelData("languages").ToObject(Of List(Of String))(),
+            '    .Interests = modelData("interests").ToObject(Of List(Of String))()
+            '}
 
-            Return model
+            Return JsonConvert.DeserializeObject(Of ModelStatus)(modelData)
         Catch ex As Exception
             MessageBox.Show("Fehler beim Verarbeiten der JSON-Daten: " & ex.Message)
             Return Nothing

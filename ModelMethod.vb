@@ -7,19 +7,12 @@ Module ModelMethod
         Select Case ShortStatus
 
             Case "virtualPrivate" : Return "Virtuell Privat"
-
             Case "public" : Return "Öffentlich"
-
             Case "private" : Return "Privat"
-
             Case "p2p" : Return "Cam 2 Cam"
-
             Case "off" : Return "Offline"
-
             Case "groupShow" : Return "Gruppen-Show"
-
             Case "idle" : Return "Bald Live"
-
             Case Else : Return "Unbekannt"
 
         End Select
@@ -37,6 +30,9 @@ Module ModelMethod
             'Model Id festlegen
             Form1.modelId = .Id
             Form1.userName = .Username
+            Form1.LPrivateRate.Text = $"Private: { .PrivateRate} TK / Min."
+            Form1.LC2CRate.Text = $"C2C: { .P2pRate} TK / Min."
+            Form1.LPosition.Text = $"Platzierung: { .currPosition}"
 
             'Form1.SetModelStatus(.status)
 
@@ -49,16 +45,17 @@ Module ModelMethod
                 Dim TotalMinutes As Integer = CInt(StatusDuration.TotalMinutes) + 1
                 Dim TKIncome As Integer
                 Dim UserName As String = info.CurStatus & info.StatusChangedAt.ToString("_yyyy_MM_dd_HH_mm")
+                Dim UserId As Integer = CInt(info.StatusChangedAt.ToString("MMddHHmm"))
 
                 Select Case info.CurStatus
                     Case "private"
 
                         TKIncome = TotalMinutes * .PrivateRate
-                        Form1.AddTips($"{UserName}", CInt(info.StatusChangedAt.ToString("yyyyMMddHH")), TKIncome)
+                        Form1.AddTips($"{UserName}", UserId, TKIncome)
 
                     Case "p2p"
                         TKIncome = TotalMinutes * .P2pRate
-                        Form1.AddTips($"{UserName}", CInt(info.StatusChangedAt.ToString("yyyyMMddHH")), TKIncome)
+                        Form1.AddTips($"{UserName}", UserId, TKIncome)
 
                 End Select
 

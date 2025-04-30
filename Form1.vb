@@ -359,7 +359,6 @@ Public Class Form1
 
                 End With
 
-
                 PrivateModelStatus = "Virtuell Privat"
 
             Case "public"
@@ -517,12 +516,9 @@ Public Class Form1
             End If
 
         Else
+
             wsClient = New ClientWebSocket()
-
-
-
             Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
-
             FormatErrors("WebSocket ist nicht verbunden!")
 
         End If
@@ -595,11 +591,11 @@ Public Class Form1
 
         Catch ex As Exception
 
-            FormatErrors(ex.Message)
-
+            FormatErrors($"HResult: {ex.HResult} Message: {ex.Message}")
             ' Prüfe auf diesen spezifischen Fehlertext oder Code
             If ex.Message.Contains("without completing the close handshake") Then
                 FormatErrors("Versuche neu zu verbinden...")
+
 
                 ' Neu verbinden
                 VerbindeWebSocketNeu()
@@ -799,16 +795,18 @@ Public Class Form1
         Dim StatusDuration As TimeSpan = DateTime.Now - info.StatusChangedAt
         Dim onlineDuration As TimeSpan = DateTime.Now - info.OnlineChangedAt
 
-        LCurStatus.Text = $"{StatusDuration:hh\:mm\:ss}"
-
-        If info.IsOnline Then
-
-            LOnline.Text = $"Online seit {onlineDuration:hh\:mm\:ss}"
-
+        If StatusDuration.Days > 0 Then
+            LCurStatus.Text = $"{StatusDuration.Days} Tage {StatusDuration:hh\:mm\:ss}"
         Else
+            LCurStatus.Text = $"{StatusDuration:hh\:mm\:ss}"
+        End If
 
-            LOnline.Text = $"Offline seit {onlineDuration:hh\:mm\:ss}"
+        Dim OnlineStatus As String = If(info.IsOnline, "Online", "Offline")
 
+        If onlineDuration.Days > 0 Then
+            LOnline.Text = $"{OnlineStatus} seit {onlineDuration.Days} Tage {onlineDuration:hh\:mm\:ss}"
+        Else
+            LOnline.Text = $"{OnlineStatus} seit {onlineDuration:hh\:mm\:ss}"
         End If
 
     End Sub

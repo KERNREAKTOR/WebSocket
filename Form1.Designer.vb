@@ -48,12 +48,15 @@ Partial Class Form1
         PicBoxAvatar = New PictureBox()
         PicBoxStatus = New PictureBox()
         GroupBox4 = New GroupBox()
+        LC2CRate = New Label()
+        LPrivateRate = New Label()
         Label1 = New Label()
         LlModelLink = New LinkLabel()
         LFollower = New Label()
         LOnline = New Label()
         LCurStatus = New Label()
         Timer1 = New Timer(components)
+        LPosition = New Label()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
         Tabbi.SuspendLayout()
@@ -93,10 +96,9 @@ Partial Class Form1
         ' lbIncome
         ' 
         lbIncome.Dock = DockStyle.Fill
-        lbIncome.DrawMode = DrawMode.OwnerDrawFixed
         lbIncome.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         lbIncome.FormattingEnabled = True
-        lbIncome.ItemHeight = 30
+        lbIncome.ItemHeight = 17
         lbIncome.Location = New Point(3, 19)
         lbIncome.Name = "lbIncome"
         lbIncome.Size = New Size(281, 475)
@@ -332,6 +334,9 @@ Partial Class Form1
         ' 
         ' GroupBox4
         ' 
+        GroupBox4.Controls.Add(LPosition)
+        GroupBox4.Controls.Add(LC2CRate)
+        GroupBox4.Controls.Add(LPrivateRate)
         GroupBox4.Controls.Add(Label1)
         GroupBox4.Controls.Add(LlModelLink)
         GroupBox4.Controls.Add(LFollower)
@@ -343,6 +348,26 @@ Partial Class Form1
         GroupBox4.TabIndex = 6
         GroupBox4.TabStop = False
         GroupBox4.Text = "Modelinformationen"
+        ' 
+        ' LC2CRate
+        ' 
+        LC2CRate.AutoSize = True
+        LC2CRate.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LC2CRate.Location = New Point(3, 124)
+        LC2CRate.Name = "LC2CRate"
+        LC2CRate.Size = New Size(43, 21)
+        LC2CRate.TabIndex = 5
+        LC2CRate.Text = "C2C:"
+        ' 
+        ' LPrivateRate
+        ' 
+        LPrivateRate.AutoSize = True
+        LPrivateRate.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LPrivateRate.Location = New Point(3, 103)
+        LPrivateRate.Name = "LPrivateRate"
+        LPrivateRate.Size = New Size(59, 21)
+        LPrivateRate.TabIndex = 4
+        LPrivateRate.Text = "Privat:"
         ' 
         ' Label1
         ' 
@@ -398,6 +423,16 @@ Partial Class Form1
         ' Timer1
         ' 
         Timer1.Interval = 1000
+        ' 
+        ' LPosition
+        ' 
+        LPosition.AutoSize = True
+        LPosition.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LPosition.Location = New Point(3, 145)
+        LPosition.Name = "LPosition"
+        LPosition.Size = New Size(102, 21)
+        LPosition.TabIndex = 6
+        LPosition.Text = "Platzierung:"
         ' 
         ' Form1
         ' 
@@ -464,5 +499,8 @@ Partial Class Form1
     Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents LlModelLink As LinkLabel
     Friend WithEvents Label1 As Label
+    Friend WithEvents LC2CRate As Label
+    Friend WithEvents LPrivateRate As Label
+    Friend WithEvents LPosition As Label
 
 End Class

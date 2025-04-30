@@ -1,5 +1,5 @@
 ﻿Public Class UpdateInfo
-    Public Property version As String
-    Public Property downloadUrl As String
-    Public Property changelog As String
+    Public Property Version As String
+    Public Property DownloadUrl As String
+    Public Property Changelog As String
 End Class
