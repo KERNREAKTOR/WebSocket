@@ -817,8 +817,8 @@ Public Class Form1
             LOnline.Text = $"{OnlineStatus} seit {onlineDuration:hh\:mm\:ss}"
         End If
 
-        'Nach 5 Minuten Followerzahl aktualesieren.
-        If UpdateFollower = 5 Then
+        'Nach 5 Sekunden Followerzahl aktualesieren.
+        If UpdateFollower = 30 Then
 
             Dim manager As New DownloadManager()
             Dim urlCam As String = $"https://de.stripchat.com/api/front/v2/models/username/{userName}/cam"
