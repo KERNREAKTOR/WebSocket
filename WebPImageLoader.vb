@@ -15,7 +15,7 @@ Public Class WebPImageLoader
             End Using
 
         Catch ex As Exception
-            FormatErrors("Fehler beim Laden des WebP-Bildes: " & ex.Message)
+            FormatErrors(ex)
         End Try
     End Sub
 End Class

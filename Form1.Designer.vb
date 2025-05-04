@@ -48,6 +48,7 @@ Partial Class Form1
         PicBoxAvatar = New PictureBox()
         PicBoxStatus = New PictureBox()
         GroupBox4 = New GroupBox()
+        LPosition = New Label()
         LC2CRate = New Label()
         LPrivateRate = New Label()
         Label1 = New Label()
@@ -56,7 +57,7 @@ Partial Class Form1
         LOnline = New Label()
         LCurStatus = New Label()
         Timer1 = New Timer(components)
-        LPosition = New Label()
+        LPoints = New Label()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
         Tabbi.SuspendLayout()
@@ -334,6 +335,7 @@ Partial Class Form1
         ' 
         ' GroupBox4
         ' 
+        GroupBox4.Controls.Add(LPoints)
         GroupBox4.Controls.Add(LPosition)
         GroupBox4.Controls.Add(LC2CRate)
         GroupBox4.Controls.Add(LPrivateRate)
@@ -348,6 +350,16 @@ Partial Class Form1
         GroupBox4.TabIndex = 6
         GroupBox4.TabStop = False
         GroupBox4.Text = "Modelinformationen"
+        ' 
+        ' LPosition
+        ' 
+        LPosition.AutoSize = True
+        LPosition.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LPosition.Location = New Point(3, 145)
+        LPosition.Name = "LPosition"
+        LPosition.Size = New Size(102, 21)
+        LPosition.TabIndex = 6
+        LPosition.Text = "Platzierung:"
         ' 
         ' LC2CRate
         ' 
@@ -424,15 +436,15 @@ Partial Class Form1
         ' 
         Timer1.Interval = 1000
         ' 
-        ' LPosition
+        ' LPoints
         ' 
-        LPosition.AutoSize = True
-        LPosition.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LPosition.Location = New Point(3, 145)
-        LPosition.Name = "LPosition"
-        LPosition.Size = New Size(102, 21)
-        LPosition.TabIndex = 6
-        LPosition.Text = "Platzierung:"
+        LPoints.AutoSize = True
+        LPoints.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LPoints.Location = New Point(3, 166)
+        LPoints.Name = "LPoints"
+        LPoints.Size = New Size(68, 21)
+        LPoints.TabIndex = 7
+        LPoints.Text = "Punkte:"
         ' 
         ' Form1
         ' 
@@ -502,5 +514,6 @@ Partial Class Form1
     Friend WithEvents LC2CRate As Label
     Friend WithEvents LPrivateRate As Label
     Friend WithEvents LPosition As Label
+    Friend WithEvents LPoints As Label
 
 End Class

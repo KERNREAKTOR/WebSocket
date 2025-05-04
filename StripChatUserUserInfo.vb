@@ -1,7 +1,7 @@
 ﻿Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 
-Public Class StripChatUserInfo
+Public Class StripChatUserUserInfo
 
     Public Property IsLive As Boolean
     Public Property IsOnline As Boolean
@@ -23,7 +23,6 @@ Public Class StripChatUserInfo
     Public Property TicketRate As Integer
     Public Property PublicRecordingsRate As Integer
     Public Property RatingPrivateUsers As Integer
-
     Public Property BroadcastServer As String
     Public Property RatingPrivate As String
     Public Property Status As String
@@ -47,6 +46,7 @@ Public Class StripChatUserInfo
 
             Id = userJsonData("user")("id").ToObject(Of Int32)
             FavoritedCount = userJsonData("user")("favoritedCount").ToObject(Of Int32)
+
 
             SpyRate = userJsonData("user")("spyRate").ToObject(Of Int32)
             SpyMinimum = userJsonData("user")("spyMinimum").ToObject(Of Int32)
@@ -80,7 +80,7 @@ Public Class StripChatUserInfo
 
         Catch ex As Exception
 
-            FormatErrors($"Fehler: {ex.Message}")
+            FormatErrors(ex)
 
         End Try
 

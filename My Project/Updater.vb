@@ -45,7 +45,7 @@ Public Class Updater
 
 
         Catch ex As Exception
-            FormatErrors($"Fehler beim Update-Check: {ex.Message}")
+            FormatErrors(ex)
 
         End Try
         Return UpdateInfo

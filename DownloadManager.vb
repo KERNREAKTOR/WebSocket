@@ -10,7 +10,7 @@ Public Class DownloadManager
             End Using
 
         Catch ex As Exception
-            FormatErrors(ex.Message + " - url: " & url)
+            FormatErrors(ex)
         End Try
 
         Return jsonString

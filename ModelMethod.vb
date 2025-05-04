@@ -5,7 +5,6 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 Module ModelMethod
     Public Function GetModelStatus(ShortStatus As String) As String
         Select Case ShortStatus
-
             Case "virtualPrivate" : Return "Virtuell Privat"
             Case "public" : Return "Öffentlich"
             Case "private" : Return "Privat"
@@ -14,7 +13,6 @@ Module ModelMethod
             Case "groupShow" : Return "Gruppen-Show"
             Case "idle" : Return "Bald Live"
             Case Else : Return "Unbekannt"
-
         End Select
     End Function
     Public Sub CheckStatus(UserJson As String)
@@ -32,7 +30,6 @@ Module ModelMethod
             Form1.userName = .Username
             Form1.LPrivateRate.Text = $"Private: { .PrivateRate} TK / Min."
             Form1.LC2CRate.Text = $"C2C: { .P2pRate} TK / Min."
-            Form1.LPosition.Text = $"Platzierung: { .currPosition}"
 
             'Form1.SetModelStatus(.status)
 
@@ -76,12 +73,19 @@ Module ModelMethod
 
             Form1.lStatus.BackColor = If(.isOnline, Color.Green, Color.Red)
 
+            'Follower ausgeben
+            If .FavoritedCount <> info.Follower Then
+                Dim FollowerDiff As Integer = .FavoritedCount - info.Follower
+                Form1.LFollower.Text = $"{ .FavoritedCount:N0} ({FollowerDiff}) Follower"
+            Else
+                Form1.LFollower.Text = $"{ .FavoritedCount:N0} Follower"
+            End If
+
+            info.Follower = .FavoritedCount
+
             If StatusChanged Then
                 info.SaveStatusInfo(info)
             End If
-
-            'Follower ausgeben
-            Form1.LFollower.Text = $"{ .FavoritedCount:N0} Follower"
 
         End With
 

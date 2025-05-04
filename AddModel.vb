@@ -47,13 +47,17 @@ Public Class AddModel
                     LBModeNames.Items.Add(ModelName)
                     LBModeNames.SelectedIndex = LBModeNames.Items.Count - 1
                     ' Check if the model name is not empty and does not already exist in the ListBox
-                    'Dim names As New System.Collections.Specialized.StringCollection()
-                    My.Settings.ModelNames.Clear()
+                    Dim names As New System.Collections.Specialized.StringCollection()
+
+                    'If My.Settings.ModelNames IsNot Nothing Then
+                    '    My.Settings.ModelNames.Clear()
+                    'End If
 
                     For Each item As String In LBModeNames.Items
-                        My.Settings.ModelNames.Add(item)
+                        names.Add(item)
+                        'My.Settings.ModelNames.Add(item)
                     Next
-
+                    My.Settings.ModelNames = names
                     ' My.Settings.ModelNames = names
                     My.Settings.Save()
                 Else

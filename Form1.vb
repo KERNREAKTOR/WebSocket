@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports System.Net.WebSockets
-Imports System.Reflection.Emit
 Imports System.Text
 Imports System.Threading
 Imports Newtonsoft.Json
@@ -8,8 +7,7 @@ Imports Newtonsoft.Json.Linq
 
 Public Class Form1
 
-    Public userName As String = "xiaoyu---sss"
-
+    Public userName As String = "scofty"
     Private wsClient As ClientWebSocket
     Private intToken As Int32
     Public modelId As Int32
@@ -21,7 +19,10 @@ Public Class Form1
     Public MessagesCounts As Int32
     'Public PrivateModelStatus As String
 
+    'WebSocketURL
     Private serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket")
+    'Speichert die Sekunden um die Follower Upzudaten
+    Private UpdateFollower As Integer
 
     ' Liste zum Speichern der eindeutigen IDs
     Private uniqueIds As New HashSet(Of Long)
@@ -215,19 +216,19 @@ Public Class Form1
 
                                             Case Else
 
-                                                FormatErrors($"Unbekannter Typ: {type}")
+                                                FormatErrorsString($"Unbekannter Typ: {type}")
 
                                         End Select
 
                                     Case Else
 
-                                        FormatErrors($"Unbekannter Parameter ---> Name: {item.Name}, Value: {item.Value}")
+                                        FormatErrorsString($"Unbekannter Parameter ---> Name: {item.Name}, Value: {item.Value}")
 
                                 End Select
 
                             Case Else
 
-                                FormatErrors($"Unbekannte Parameter ---> Name: {item.Name}, Value: {item.Value}")
+                                FormatErrorsString($"Unbekannte Parameter ---> Name: {item.Name}, Value: {item.Value}")
 
                         End Select
 
@@ -247,8 +248,8 @@ Public Class Form1
         Catch ex As Exception
 
             ' Fehlerbehandlung
-            FormatErrors($"Fehler beim Verarbeiten der Nachricht: {ex.Message} Fehler-Id: {errorId}")
-            FormatErrors(jsonString)
+            FormatErrors(ex)
+            FormatErrorsString(jsonString)
 
         End Try
     End Sub
@@ -465,43 +466,45 @@ Public Class Form1
     End Sub
 
     Private Async Function ListenForMessages() As Task
-        Dim buffer(8192) As Byte ' Buffergröße erhöht
+        Dim buffer(8192) As Byte
 
-        While wsClient.State = WebSocketState.Open
+        While True
             Try
+                ' Solange keine gültige Verbindung besteht, versuche aufzubauen
+                If wsClient Is Nothing OrElse wsClient.State <> WebSocketState.Open Then
+                    Dim unsused = Task.Delay(5000)
+                    Await VerbindeWebSocketNeu()
+                End If
+
                 Dim receivedData As New ArraySegment(Of Byte)(buffer)
                 Dim result As WebSocketReceiveResult = Await wsClient.ReceiveAsync(receivedData, CancellationToken.None)
 
                 If result.MessageType = WebSocketMessageType.Close Then
-
-                    InitializeWebSocketConnection()
-
-                    Await ListenForMessages()
-
+                    Await wsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None)
+                    wsClient.Dispose()
+                    wsClient = Nothing
+                    Continue While
                 End If
 
                 Dim message As String = Encoding.UTF8.GetString(buffer, 0, result.Count)
-
                 ProcessMessage(message)
 
             Catch ex As Exception
+                FormatErrors(ex)
 
-                FormatErrors("Fehler beim Empfangen: " & ex.Message)
+                If ex.Message.Contains("without completing the close handshake") OrElse
+               TypeOf ex Is WebSocketException Then
+                    FormatErrors(ex)
+                    wsClient?.Dispose()
+                    wsClient = Nothing
 
-                ' Prüfe auf diesen spezifischen Fehlertext oder Code
-                If ex.Message.Contains("without completing the close handshake") Then
-
-                    ' Wenn der Fehler auftritt, versuchen Sie, die Verbindung wiederherzustellen
-                    FormatErrors("Versuche neu zu verbinden...")
-
-                    ' Neu verbinden
-                    VerbindeWebSocketNeu()
-
+                    Dim unused = Task.Delay(2000) ' kurze Wartezeit vor erneutem Versuch
+                    Continue While
                 End If
-
             End Try
         End While
     End Function
+
 
     Private Async Sub SendMessage(message As String)
         If wsClient IsNot Nothing AndAlso wsClient.State = WebSocketState.Open Then
@@ -516,10 +519,14 @@ Public Class Form1
             End If
 
         Else
+            Try
+                wsClient = New ClientWebSocket()
+                Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
+            Catch ex As Exception
+                FormatErrors(ex)
+            End Try
 
-            wsClient = New ClientWebSocket()
-            Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
-            FormatErrors("WebSocket ist nicht verbunden!")
+
 
         End If
     End Sub
@@ -544,6 +551,8 @@ Public Class Form1
 
             modelId = Stripchat.GetUserInformation.Id
             LlModelLink.Text = Stripchat.GetUserInformation.Username
+            LPosition.Text = $"Platzierung {Stripchat.GetUser.CurrPosition:N0}"
+            LPoints.Text = $"{Stripchat.GetUser.CurrPoints:N0} Punkte"
 
             'LFollower.Text = $"{Stripchat.GetUserInformation.FavoritedCount:N0} Follower"
 
@@ -591,18 +600,15 @@ Public Class Form1
 
         Catch ex As Exception
 
-            FormatErrors($"HResult: {ex.HResult} Message: {ex.Message}")
+            FormatErrors(ex)
             ' Prüfe auf diesen spezifischen Fehlertext oder Code
             If ex.Message.Contains("without completing the close handshake") Then
-                FormatErrors("Versuche neu zu verbinden...")
-
-
                 ' Neu verbinden
-                VerbindeWebSocketNeu()
+                Dim unused = VerbindeWebSocketNeu()
             End If
         End Try
     End Sub
-    Private Async Sub VerbindeWebSocketNeu()
+    Private Async Function VerbindeWebSocketNeu() As Task
         ' Trenne ggf. vorherige Verbindung
         wsClient?.Dispose()
 
@@ -610,16 +616,20 @@ Public Class Form1
         wsClient = New ClientWebSocket()
 
         Try
-            Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
-            ' Starte erneut Empfang
-            InitializeWebSocketConnection()
+            If Await Network.IsInternetAvailableAsync() Then
+                Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
+                ' Starte erneut Empfang
+                InitializeWebSocketConnection()
 
-            Await ListenForMessages()
-            FormatErrors("Wiederverbinden war erfolgreich")
+                Await ListenForMessages()
+                FormatErrorsString("Wiederverbinden war erfolgreich")
+                Return
+            End If
+
         Catch ex As Exception
-            FormatErrors("Fehler beim Wiederverbinden: " & ex.Message)
+            FormatErrors(ex)
         End Try
-    End Sub
+    End Function
 
     Private Sub UpdateGoalStatus(Stripchat As StripchatDespatcher)
         If Stripchat.GetCameraInformation.GetGoalInfo.IsEnabled Then
@@ -753,9 +763,7 @@ Public Class Form1
             Next
 
             If Not intToken = 0 Then
-
                 lIncome.Text = $"{intToken} Token ({Math.Round(intToken * 0.05, 2):F2} $)"
-
             End If
 
         End If
@@ -808,6 +816,62 @@ Public Class Form1
         Else
             LOnline.Text = $"{OnlineStatus} seit {onlineDuration:hh\:mm\:ss}"
         End If
+
+        'Nach 5 Minuten Followerzahl aktualesieren.
+        If UpdateFollower = 5 Then
+
+            Dim manager As New DownloadManager()
+            Dim urlCam As String = $"https://de.stripchat.com/api/front/v2/models/username/{userName}/cam"
+            Dim jsonStringCam As String = manager.DownloadJsonAsync(urlCam)
+            Dim Stripchat As New StripchatDespatcher(jsonStringCam)
+            Dim IntDiff As Integer = Stripchat.GetUserInformation.FavoritedCount - info.Follower
+
+            If Stripchat.GetUserInformation.Status <> info.CurStatus Or
+                Stripchat.GetUserInformation.IsOnline <> info.IsOnline Then
+
+                CheckStatus(JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)("user")("user").ToString())
+
+                With Stripchat.GetUserInformation
+
+                    info.CurStatus = .Status
+                    info.IsOnline = .IsOnline
+                    info.Follower = .FavoritedCount
+                    info.CurrPosition = Stripchat.GetUser.CurrPosition
+                    info.CurrPoints = Stripchat.GetUser.CurrPoints
+
+                End With
+
+                info.SaveStatusInfo(info)
+
+            End If
+
+            If IntDiff = 0 Then
+                Me.LFollower.Text = $"{ Stripchat.GetUserInformation.FavoritedCount:N0} Follower"
+            Else
+                Me.LFollower.Text = $"{ Stripchat.GetUserInformation.FavoritedCount:N0} ({IntDiff}) Follower"
+            End If
+
+            IntDiff = Stripchat.GetUser.CurrPosition - info.CurrPosition
+
+            If IntDiff = 0 Then
+                Me.LPosition.Text = $"Platzierung: { Stripchat.GetUser.CurrPosition:N0}"
+            Else
+                Me.LPosition.Text = $"Platzierung: { Stripchat.GetUser.CurrPosition:N0} ({IntDiff})"
+            End If
+
+            IntDiff = Stripchat.GetUser.CurrPoints - info.CurrPoints
+
+            If IntDiff = 0 Then
+                Me.LPoints.Text = $"{ Stripchat.GetUser.CurrPoints:N0} Punkte"
+            Else
+                Me.LPoints.Text = $"{ Stripchat.GetUser.CurrPoints:N0} ({IntDiff}) Punkte"
+            End If
+
+
+            UpdateFollower = 0
+        End If
+
+        UpdateFollower += 1
 
     End Sub
 

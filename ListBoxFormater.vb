@@ -1,5 +1,49 @@
-﻿Module ListBoxFormater
-    Public Sub FormatErrors(Message As String)
+﻿Imports System.Net.WebSockets
+
+Module ListBoxFormater
+    Public Sub FormatErrors(Message As Exception)
+
+        Dim currentTab As TabPage = Form1.Tabbi.SelectedTab
+        Dim timestamp As String = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+
+        With Form1.lbErrors
+
+            .Items.Add($"{timestamp} - Fehlermessage: {Message.Message} Stacktrace: {Message.StackTrace}")
+            Form1.TPErrors.Text = $"Fehler({ .Items.Count})"
+            .TopIndex = .Items.Count - 1
+
+            If currentTab.TabIndex = 1 Then
+                Form1.ErrorCounts = .Items.Count
+                Form1.TPErrors.Text = $"Fehler"
+            Else
+                Form1.TPErrors.Text = $"Fehler({ .Items.Count - Form1.ErrorCounts})"
+            End If
+
+        End With
+
+    End Sub
+    Public Sub FormatErrors(Message As WebSocketException)
+
+        Dim currentTab As TabPage = Form1.Tabbi.SelectedTab
+        Dim timestamp As String = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+
+        With Form1.lbErrors
+
+            .Items.Add($"{timestamp} - HResult: {Message.HResult} Message: {Message.Message} Stacktrace: {Message.StackTrace}")
+            Form1.TPErrors.Text = $"Fehler({ .Items.Count})"
+            .TopIndex = .Items.Count - 1
+
+            If currentTab.TabIndex = 1 Then
+                Form1.ErrorCounts = .Items.Count
+                Form1.TPErrors.Text = $"Fehler"
+            Else
+                Form1.TPErrors.Text = $"Fehler({ .Items.Count - Form1.ErrorCounts})"
+            End If
+
+        End With
+
+    End Sub
+    Public Sub FormatErrorsString(Message As String)
 
         Dim currentTab As TabPage = Form1.Tabbi.SelectedTab
         Dim timestamp As String = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -11,14 +55,10 @@
             .TopIndex = .Items.Count - 1
 
             If currentTab.TabIndex = 1 Then
-
                 Form1.ErrorCounts = .Items.Count
                 Form1.TPErrors.Text = $"Fehler"
-
             Else
-
                 Form1.TPErrors.Text = $"Fehler({ .Items.Count - Form1.ErrorCounts})"
-
             End If
 
         End With

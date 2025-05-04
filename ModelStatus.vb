@@ -6,7 +6,6 @@ Public Class ModelStatus
     Public Property Id As Integer
     Public Property PrivateRate As Integer
     Public Property RatingPosition As Integer
-    Public Property CurrPosition As Integer
     Public Property P2pRate As Integer
     Public Property FavoritedCount As Integer
     Public Property Username As String
