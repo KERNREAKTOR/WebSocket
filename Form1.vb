@@ -264,10 +264,10 @@ Public Class Form1
     End Sub
 
     Public Sub AddTips(json As JObject)
-        Dim user As String = json("push")("pub")("data")("message")("userData")("username").ToString()
-        Dim userId As Int32 = json("push")("pub")("data")("message")("userData")("id")
+        Dim user As String = json("pub")("data")("message")("userData")("username").ToString()
+        Dim userId As Int32 = json("pub")("data")("message")("userData")("id")
         Dim RankNumber As Int16 = 1
-        Dim TokenAmount As Int32 = json("push")("pub")("data")("message")("details")("amount").ToObject(Of Int32)
+        Dim TokenAmount As Int32 = json("pub")("data")("message")("details")("amount").ToObject(Of Int32)
 
         If userId = 0 Then
             user = "***"
@@ -315,10 +315,10 @@ Public Class Form1
         ranking.SaveToFile()
     End Sub
     Public Sub AddUserUserBoughtContentTips(json As JObject)
-        Dim user As String = json("push")("pub")("data")("message")("userData")("username").ToString()
-        Dim userId As Int32 = json("push")("pub")("data")("message")("userData")("id")
-        Dim TokenAmount As Int32 = json("push")("pub")("data")("message")("details")("content")("cost").ToObject(Of Int32)
-        Dim ContentType As String = json("push")("pub")("data")("message")("details")("content")("type").ToString
+        Dim user As String = json("pub")("data")("message")("userData")("username").ToString()
+        Dim userId As Int32 = json("pub")("data")("message")("userData")("id")
+        Dim TokenAmount As Int32 = json("pub")("data")("message")("details")("content")("cost").ToObject(Of Int32)
+        Dim ContentType As String = json("pub")("data")("message")("details")("content")("type").ToString
         Dim RankNumber As Int16 = 1
 
         If userId = 0 Then
