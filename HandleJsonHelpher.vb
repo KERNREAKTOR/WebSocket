@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices.JavaScript.JSType
+﻿Option Strict On
+Imports System.Runtime.InteropServices.JavaScript.JSType
 Imports Newtonsoft.Json.Linq
 
 Module HandleJsonHelpher
@@ -9,8 +10,9 @@ Module HandleJsonHelpher
         Select Case messageType
 
             Case "text"
-                Dim username As String = item.Value("pub")("data")("message")("userData")("username").ToString()
-                Dim body As String = item.Value("pub")("data")("message")("details")("body").ToString()
+
+                Dim username As String = item.Value.SelectToken("pub.data.message.userData.username")?.ToString
+                Dim body As String = item.Value.SelectToken("pub.data.message.details.body")?.ToString()
                 FormatMessages($"{username}: {body}")
 
             Case "userSubscribedOnFanClub"
@@ -35,7 +37,7 @@ Module HandleJsonHelpher
 
             Case "userBoughtContent"
 
-                Form1.AddUserUserBoughtContentTips(item.Value)
+                Form1.AddUserUserBoughtContentTips(item)
 
             Case "clearChat"
                 '{"push":{"channel":"newChatMessage@13971979","pub":{"data":{"additionalData":{},"message":{"additionalData":{"isKing":false,"isKnight":false,"isStudioAdmin":false,"isStudioModerator":false},"cacheId":"67f3e6c9720be","createdAt":"2025-04-07T14:52:57Z","details":{"fanClubNumberMonthsOfSubscribed":0,"fanClubTier":null},"id":1828755946807486,"modelId":13971979,"type":"clearChat","userData":{"hasAdminBadge":false,"hasVrDevice":false,"id":13971979,"isAdmin":false,"isBlocked":false,"isDeleted":false,"isExGreen":false,"isGreen":false,"isModel":true,"isOnline":true,"isRegular":false,"isStudio":false,"isSupport":false,"isUltimate":false,"userRanking":null,"username":"Alirawrz"}}},"offset":1105}}}
@@ -43,11 +45,11 @@ Module HandleJsonHelpher
             Case "privateTip"
 
                 '{"push":{"channel":"newChatMessage@57255263","pub":{"data":{"additionalData":{},"message":{"additionalData":{"isKing":false,"isKnight":false,"isStudioAdmin":false,"isStudioModerator":false},"cacheId":"67f2ced94fd04","createdAt":"2025-04-06T18:58:33Z","details":{"amount":11,"body":"make your fingers wet and put it in my mouth","fanClubNumberMonthsOfSubscribed":22,"fanClubTier":"tier1","isAnonymous":false,"source":"","tipData":{"tipperKey":"UZhYgZPpKXZC7KO72UKUBg=="}},"id":1828680801516804,"modelId":57255263,"type":"privateTip","userData":{"hasAdminBadge":false,"hasVrDevice":false,"id":41152083,"isAdmin":false,"isBlocked":false,"isDeleted":false,"isExGreen":false,"isGreen":false,"isModel":false,"isOnline":false,"isRegular":false,"isStudio":false,"isSupport":false,"isUltimate":true,"userRanking":{"isEx":false,"league":"diamond","level":55},"username":"Maylo5978"}}},"offset":748}}}
-                Form1.AddTips(item.Value)
+                Form1.AddTips(item)
 
             Case "tip"
                 '{"push":{"channel":"newChatMessage@172531274","pub":{"data":{"additionalData":{},"message":{"additionalData":{"isKing":false,"isKnight":false,"isStudioAdmin":false,"isStudioModerator":false},"cacheId":"67e7ccb1db869","createdAt":"2025-03-29T10:34:25Z","details":{"amount":5,"body":"","fanClubNumberMonthsOfSubscribed":0,"fanClubTier":null,"isAnonymous":false,"source":"fullScreen","tipData":{"tipperKey":"GY2HcU8UTSqdCNHDbfAVew=="}},"id":1827924309031017,"modelId":172531274,"type":"tip","userData":{"hasAdminBadge":false,"hasVrDevice":false,"id":16765833,"isAdmin":false,"isBlocked":false,"isDeleted":false,"isExGreen":false,"isGreen":true,"isModel":false,"isOnline":true,"isRegular":false,"isStudio":false,"isSupport":false,"isUltimate":false,"userRanking":{"isEx":false,"league":"gold","level":54},"username":"merlin8989"}}},"offset":161}}}
-                Form1.AddTips(item.Value)
+                Form1.AddTips(item)
 
             Case Else
 

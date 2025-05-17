@@ -48,6 +48,7 @@ Partial Class Form1
         PicBoxAvatar = New PictureBox()
         PicBoxStatus = New PictureBox()
         GroupBox4 = New GroupBox()
+        LPoints = New Label()
         LPosition = New Label()
         LC2CRate = New Label()
         LPrivateRate = New Label()
@@ -57,7 +58,7 @@ Partial Class Form1
         LOnline = New Label()
         LCurStatus = New Label()
         Timer1 = New Timer(components)
-        LPoints = New Label()
+        pnlOnlineStatus = New Panel()
         GroupBox1.SuspendLayout()
         GroupBox2.SuspendLayout()
         Tabbi.SuspendLayout()
@@ -74,6 +75,7 @@ Partial Class Form1
         ' 
         ' lbMessages
         ' 
+        lbMessages.BackColor = Color.Gray
         lbMessages.Dock = DockStyle.Fill
         lbMessages.FormattingEnabled = True
         lbMessages.ItemHeight = 17
@@ -96,6 +98,7 @@ Partial Class Form1
         ' 
         ' lbIncome
         ' 
+        lbIncome.BackColor = Color.DarkGray
         lbIncome.Dock = DockStyle.Fill
         lbIncome.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         lbIncome.FormattingEnabled = True
@@ -118,7 +121,7 @@ Partial Class Form1
         ' 
         ' lStatus
         ' 
-        lStatus.BackColor = Color.Red
+        lStatus.BackColor = Color.DimGray
         lStatus.BorderStyle = BorderStyle.Fixed3D
         lStatus.Dock = DockStyle.Top
         lStatus.Font = New Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
@@ -170,6 +173,7 @@ Partial Class Form1
         ' 
         ' TPMessages
         ' 
+        TPMessages.BackColor = Color.Transparent
         TPMessages.Controls.Add(lbMessages)
         TPMessages.ImageIndex = 0
         TPMessages.Location = New Point(4, 31)
@@ -178,10 +182,10 @@ Partial Class Form1
         TPMessages.Size = New Size(764, 130)
         TPMessages.TabIndex = 0
         TPMessages.Text = "Nachrichten"
-        TPMessages.UseVisualStyleBackColor = True
         ' 
         ' TPErrors
         ' 
+        TPErrors.BackColor = Color.DimGray
         TPErrors.Controls.Add(lbErrors)
         TPErrors.ImageIndex = 1
         TPErrors.Location = New Point(4, 31)
@@ -190,10 +194,10 @@ Partial Class Form1
         TPErrors.Size = New Size(764, 130)
         TPErrors.TabIndex = 1
         TPErrors.Text = "Fehler"
-        TPErrors.UseVisualStyleBackColor = True
         ' 
         ' lbErrors
         ' 
+        lbErrors.BackColor = Color.Gray
         lbErrors.Dock = DockStyle.Fill
         lbErrors.ForeColor = Color.Red
         lbErrors.FormattingEnabled = True
@@ -205,6 +209,7 @@ Partial Class Form1
         ' 
         ' TPTips
         ' 
+        TPTips.BackColor = Color.DimGray
         TPTips.Controls.Add(LBTips)
         TPTips.ImageIndex = 2
         TPTips.Location = New Point(4, 31)
@@ -212,15 +217,15 @@ Partial Class Form1
         TPTips.Size = New Size(764, 130)
         TPTips.TabIndex = 2
         TPTips.Text = "Trinkgelder"
-        TPTips.UseVisualStyleBackColor = True
         ' 
         ' LBTips
         ' 
+        LBTips.BackColor = Color.Gray
         LBTips.Dock = DockStyle.Fill
-        LBTips.Font = New Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LBTips.ForeColor = Color.ForestGreen
+        LBTips.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LBTips.ForeColor = Color.Lime
         LBTips.FormattingEnabled = True
-        LBTips.ItemHeight = 25
+        LBTips.ItemHeight = 21
         LBTips.Location = New Point(0, 0)
         LBTips.Name = "LBTips"
         LBTips.Size = New Size(764, 130)
@@ -228,6 +233,7 @@ Partial Class Form1
         ' 
         ' TPModelStatus
         ' 
+        TPModelStatus.BackColor = Color.DimGray
         TPModelStatus.Controls.Add(LBModelStatus)
         TPModelStatus.ImageIndex = 4
         TPModelStatus.Location = New Point(4, 31)
@@ -236,10 +242,10 @@ Partial Class Form1
         TPModelStatus.Size = New Size(764, 130)
         TPModelStatus.TabIndex = 3
         TPModelStatus.Text = "Modelstatus"
-        TPModelStatus.UseVisualStyleBackColor = True
         ' 
         ' LBModelStatus
         ' 
+        LBModelStatus.BackColor = Color.Gray
         LBModelStatus.Dock = DockStyle.Fill
         LBModelStatus.ForeColor = Color.DeepSkyBlue
         LBModelStatus.FormattingEnabled = True
@@ -283,10 +289,14 @@ Partial Class Form1
         ' 
         ' ToolStrip1
         ' 
+        ToolStrip1.BackColor = Color.Transparent
+        ToolStrip1.BackgroundImageLayout = ImageLayout.None
+        ToolStrip1.GripStyle = ToolStripGripStyle.Hidden
         ToolStrip1.ImageScalingSize = New Size(24, 24)
         ToolStrip1.Items.AddRange(New ToolStripItem() {ToolStripButton1, ToolStripButton2})
         ToolStrip1.Location = New Point(0, 43)
         ToolStrip1.Name = "ToolStrip1"
+        ToolStrip1.RenderMode = ToolStripRenderMode.Professional
         ToolStrip1.Size = New Size(778, 31)
         ToolStrip1.TabIndex = 8
         ToolStrip1.Text = "ToolStrip1"
@@ -350,6 +360,16 @@ Partial Class Form1
         GroupBox4.TabIndex = 6
         GroupBox4.TabStop = False
         GroupBox4.Text = "Modelinformationen"
+        ' 
+        ' LPoints
+        ' 
+        LPoints.AutoSize = True
+        LPoints.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LPoints.Location = New Point(3, 166)
+        LPoints.Name = "LPoints"
+        LPoints.Size = New Size(68, 21)
+        LPoints.TabIndex = 7
+        LPoints.Text = "Punkte:"
         ' 
         ' LPosition
         ' 
@@ -436,21 +456,20 @@ Partial Class Form1
         ' 
         Timer1.Interval = 1000
         ' 
-        ' LPoints
+        ' pnlOnlineStatus
         ' 
-        LPoints.AutoSize = True
-        LPoints.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LPoints.Location = New Point(3, 166)
-        LPoints.Name = "LPoints"
-        LPoints.Size = New Size(68, 21)
-        LPoints.TabIndex = 7
-        LPoints.Text = "Punkte:"
+        pnlOnlineStatus.Location = New Point(4, 4)
+        pnlOnlineStatus.Name = "pnlOnlineStatus"
+        pnlOnlineStatus.Size = New Size(8, 35)
+        pnlOnlineStatus.TabIndex = 11
         ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
+        BackColor = Color.DimGray
         ClientSize = New Size(1065, 583)
+        Controls.Add(pnlOnlineStatus)
         Controls.Add(PicBoxAvatar)
         Controls.Add(PicBoxStatus)
         Controls.Add(LCurStatus)
@@ -515,5 +534,6 @@ Partial Class Form1
     Friend WithEvents LPrivateRate As Label
     Friend WithEvents LPosition As Label
     Friend WithEvents LPoints As Label
+    Friend WithEvents pnlOnlineStatus As Panel
 
 End Class

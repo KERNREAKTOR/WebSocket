@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Net.Mime
 Imports System.Net.WebSockets
 Imports System.Text
 Imports System.Threading
@@ -71,7 +72,7 @@ Public Class Form1
                                 lbMessages.Items.Add($"Verbunden mit dem Client: {client}")
                                 lbMessages.Items.Add($"Version: {version}")
                                 lbMessages.Items.Add($"Ping: {ping} ms")
-                                FormatMessages($"Pong: {pong}")
+                                lbMessages.Items.Add($"Pong: {pong}")
 
                             Case "push"
 
@@ -120,7 +121,6 @@ Public Class Form1
                                         For Each modelId As Integer In modelIds
 
                                             Dim userName As String
-
 
                                             userName = If(modelId = 0, "***", GetUsername(modelId))
 
@@ -263,11 +263,18 @@ Public Class Form1
         End Try
     End Sub
 
-    Public Sub AddTips(json As JObject)
-        Dim user As String = json("pub")("data")("message")("userData")("username").ToString()
-        Dim userId As Int32 = json("pub")("data")("message")("userData")("id")
+    Public Sub AddTips(json As JProperty)
+        Dim user As String
+        Dim userId As Int32
         Dim RankNumber As Int16 = 1
-        Dim TokenAmount As Int32 = json("pub")("data")("message")("details")("amount").ToObject(Of Int32)
+        Dim TokenAmount As Int32
+
+
+        With json.Value
+            user = .SelectToken("pub.data.message.userData.username")?.ToString()
+            userId = .SelectToken("pub.data.message.userData.id")?.ToObject(Of Int32)()
+            TokenAmount = .SelectToken("pub.data.message.details.amount")?.ToObject(Of Int32)()
+        End With
 
         If userId = 0 Then
             user = "***"
@@ -314,11 +321,20 @@ Public Class Form1
 
         ranking.SaveToFile()
     End Sub
-    Public Sub AddUserUserBoughtContentTips(json As JObject)
-        Dim user As String = json("pub")("data")("message")("userData")("username").ToString()
-        Dim userId As Int32 = json("pub")("data")("message")("userData")("id")
-        Dim TokenAmount As Int32 = json("pub")("data")("message")("details")("content")("cost").ToObject(Of Int32)
-        Dim ContentType As String = json("pub")("data")("message")("details")("content")("type").ToString
+    Public Sub AddUserUserBoughtContentTips(json As JProperty)
+        Dim user As String
+        Dim userId As Int32
+        Dim ContentType As String
+        Dim TokenAmount As Int32
+
+        With json.Value
+
+            user = .SelectToken("pub.data.message.userData.username")?.ToString()
+            userId = .SelectToken("pub.data.message.userData.id")?.ToObject(Of Int32)()
+            TokenAmount = .SelectToken("pub.data.message.details.content.cost")?.ToObject(Of Int32)()
+            ContentType = .SelectToken("pub.data.message.details.content.type")?.ToString()
+        End With
+
         Dim RankNumber As Int16 = 1
 
         If userId = 0 Then
@@ -563,34 +579,23 @@ Public Class Form1
             LPosition.Text = $"Platzierung {Stripchat.GetUser.CurrPosition:N0}"
             LPoints.Text = $"{Stripchat.GetUser.CurrPoints:N0} Punkte"
 
-            'LFollower.Text = $"{Stripchat.GetUserInformation.FavoritedCount:N0} Follower"
-
             ranking.LoadFromFile()
 
             Dim ImgLoader As New WebPImageLoader()
-
             ImgLoader.LoadWebPImageAsync(Stripchat.GetUserInformation.PreviewUrlThumbBig, PicBoxAvatar)
-
-            'Dim jsonCamObject As JObject = JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)("user")("user")
-
-            'GetUserInformation = New StripChatUserInfo(jsonCamObject("user").ToString())
 
             CheckStatus(JsonConvert.DeserializeObject(Of JObject)(jsonStringCam)("user")("user").ToString)
 
             Dim RankNumber As Int32 = 1
 
             For Each entry In ranking.GetRanking()
-
                 lbIncome.Items.Add($"{RankNumber}. {entry.TotalTips} Tokens - {entry.Username}")
                 RankNumber += 1
                 intToken += entry.TotalTips
-
             Next
 
             If Not intToken = 0 Then
-
                 lIncome.Text = $"{intToken} Token ({Math.Round(intToken * 0.05, 2):F2} $)"
-
             End If
 
             Timer1.Enabled = True
@@ -598,9 +603,6 @@ Public Class Form1
             SetModelStatus(Stripchat.GetUserInformation.Status)
 
             wsClient = New ClientWebSocket()
-
-            'Dim serverUri As New Uri("wss://websocket-centrifugo-v5.sc-apps.com/connection/websocket") ' Ersetze mit der echten URL
-
             Await wsClient.ConnectAsync(serverUri, CancellationToken.None)
 
             InitializeWebSocketConnection()

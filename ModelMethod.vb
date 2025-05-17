@@ -31,10 +31,6 @@ Module ModelMethod
             Form1.LPrivateRate.Text = $"Private: { .PrivateRate} TK / Min."
             Form1.LC2CRate.Text = $"C2C: { .P2pRate} TK / Min."
 
-            'Form1.SetModelStatus(.status)
-
-            'Form1.lStatus.Text = $"{Form1.userName} - {Form1.PrivateModelStatus}"
-
             'Status ändert sich
             If info.CurStatus <> .Status Then
 
@@ -71,7 +67,7 @@ Module ModelMethod
                 FormatStatus($"{ .username} hat sich {If(.IsOnline, "angemeldet", "abgemeldet")}")
             End If
 
-            Form1.lStatus.BackColor = If(.isOnline, Color.Green, Color.Red)
+            Form1.pnlOnlineStatus.BackColor = If(.isOnline, Color.Lime, Color.Red)
 
             'Follower ausgeben
             If .FavoritedCount <> info.Follower Then
