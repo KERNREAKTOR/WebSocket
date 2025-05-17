@@ -80,8 +80,11 @@ Public Class Form1
 
                                 Select Case channel
 
+                                    Case $"broadcastSettingsChanged@{modelId}"
+                                        HandleBroadcastSettingsChanged(item)
                                     Case $"newChatMessage@{modelId}"
                                         HandleChatMessage(item)
+
 
                                 End Select
 
@@ -667,6 +670,7 @@ Public Class Form1
         SendMessage(jsonCr.SubscribeGoalChanged)
         SendMessage(jsonCr.SubscribeModelStatusChanged)
         SendMessage(jsonCr.SubscribeUserUpdated)
+        SendMessage(jsonCr.SubscribeBroadcastSettingsChanged)
         wsId = jsonCr.WebSocketId
 
     End Sub
@@ -721,6 +725,7 @@ Public Class Form1
             SendMessage(jsonCr.UnsubcribeGoalChanged)
             SendMessage(jsonCr.UnsubcribeModelStatusChanged)
             SendMessage(jsonCr.UnsubcribeUserUpdated)
+            SendMessage(jsonCr.UnsubcribeBroadcastSettingsChanged)
             wsId = wsId + 4
 
             modelId = Stripchat.GetUserInformation.Id
@@ -729,6 +734,7 @@ Public Class Form1
             SendMessage(jsonCr.SubscribeGoalChanged)
             SendMessage(jsonCr.SubscribeModelStatusChanged)
             SendMessage(jsonCr.SubscribeUserUpdated)
+            SendMessage(jsonCr.SubscribeBroadcastSettingsChanged)
 
             My.Settings.CurModelName = SelectedModel
             My.Settings.Save()

@@ -78,7 +78,33 @@ Public Class JsonCreator
             Return JsonConvert.SerializeObject(jsonObj)
         End Get
     End Property
+    ReadOnly Property SubscribeBroadcastSettingsChanged As String
+        Get
+            IntWsId += 1
+            Dim jsonObj = New With {
+            .subscribe = New With {
+                .channel = $"broadcastSettingsChanged@{IntModelId}"
+            },
+            .id = IntWsId
+        }
+            Return JsonConvert.SerializeObject(jsonObj)
+        End Get
+    End Property
 
+    ReadOnly Property UnsubcribeBroadcastSettingsChanged As String
+        Get
+            IntWsId += 1
+
+            Dim jsonObj = New With {
+            .unsubscribe = New With {
+                .channel = $"broadcastSettingsChanged@{IntModelId}"
+            },
+            .id = IntWsId
+        }
+
+            Return JsonConvert.SerializeObject(jsonObj)
+        End Get
+    End Property
     ReadOnly Property UnsubcribeNewChatMessage As String
         Get
             IntWsId += 1

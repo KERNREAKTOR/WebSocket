@@ -1,8 +1,13 @@
 ﻿Option Strict On
 Imports System.Runtime.InteropServices.JavaScript.JSType
+Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 
 Module HandleJsonHelpher
+    Public Sub HandleBroadcastSettingsChanged(item As JProperty)
+        Dim message As BroadcastSettingsChangedMessage = JsonConvert.DeserializeObject(Of BroadcastSettingsChangedMessage)(item.Value.ToString)
+        FormatErrorsString($"BroadcastSettingsChanged: {message.pub.data.bitrate:N0}")
+    End Sub
     Public Sub HandleChatMessage(item As JProperty)
 
         Dim messageType As String = item.Value("pub")("data")("message")("type").ToString()

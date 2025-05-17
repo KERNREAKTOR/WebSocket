@@ -90,7 +90,7 @@ Partial Class Form1
         lIncome.Dock = DockStyle.Bottom
         lIncome.FlatStyle = FlatStyle.Popup
         lIncome.Font = New Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        lIncome.Location = New Point(3, 494)
+        lIncome.Location = New Point(3, 600)
         lIncome.Name = "lIncome"
         lIncome.Size = New Size(281, 43)
         lIncome.TabIndex = 1
@@ -105,7 +105,7 @@ Partial Class Form1
         lbIncome.ItemHeight = 17
         lbIncome.Location = New Point(3, 19)
         lbIncome.Name = "lbIncome"
-        lbIncome.Size = New Size(281, 475)
+        lbIncome.Size = New Size(281, 581)
         lbIncome.TabIndex = 0
         ' 
         ' lGoal
@@ -140,7 +140,7 @@ Partial Class Form1
         GroupBox1.Dock = DockStyle.Right
         GroupBox1.Location = New Point(778, 43)
         GroupBox1.Name = "GroupBox1"
-        GroupBox1.Size = New Size(287, 540)
+        GroupBox1.Size = New Size(287, 646)
         GroupBox1.TabIndex = 5
         GroupBox1.TabStop = False
         GroupBox1.Text = "Token Ranking"
@@ -149,7 +149,7 @@ Partial Class Form1
         ' 
         GroupBox2.Controls.Add(Tabbi)
         GroupBox2.Dock = DockStyle.Bottom
-        GroupBox2.Location = New Point(0, 396)
+        GroupBox2.Location = New Point(0, 502)
         GroupBox2.Name = "GroupBox2"
         GroupBox2.Size = New Size(778, 187)
         GroupBox2.TabIndex = 6
@@ -166,6 +166,7 @@ Partial Class Form1
         Tabbi.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         Tabbi.ImageList = ImageList1
         Tabbi.Location = New Point(3, 19)
+        Tabbi.Multiline = True
         Tabbi.Name = "Tabbi"
         Tabbi.SelectedIndex = 0
         Tabbi.Size = New Size(772, 165)
@@ -222,10 +223,10 @@ Partial Class Form1
         ' 
         LBTips.BackColor = Color.Gray
         LBTips.Dock = DockStyle.Fill
-        LBTips.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LBTips.Font = New Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LBTips.ForeColor = Color.Lime
         LBTips.FormattingEnabled = True
-        LBTips.ItemHeight = 21
+        LBTips.ItemHeight = 17
         LBTips.Location = New Point(0, 0)
         LBTips.Name = "LBTips"
         LBTips.Size = New Size(764, 130)
@@ -272,7 +273,7 @@ Partial Class Form1
         GroupBox3.Controls.Add(PBGoal)
         GroupBox3.Controls.Add(lGoal)
         GroupBox3.Dock = DockStyle.Bottom
-        GroupBox3.Location = New Point(0, 307)
+        GroupBox3.Location = New Point(0, 413)
         GroupBox3.Name = "GroupBox3"
         GroupBox3.Size = New Size(778, 89)
         GroupBox3.TabIndex = 7
@@ -322,10 +323,9 @@ Partial Class Form1
         ' 
         ' PicBoxAvatar
         ' 
-        PicBoxAvatar.Dock = DockStyle.Fill
-        PicBoxAvatar.Location = New Point(287, 74)
+        PicBoxAvatar.Location = New Point(10, 22)
         PicBoxAvatar.Name = "PicBoxAvatar"
-        PicBoxAvatar.Size = New Size(491, 201)
+        PicBoxAvatar.Size = New Size(128, 128)
         PicBoxAvatar.SizeMode = PictureBoxSizeMode.Zoom
         PicBoxAvatar.TabIndex = 9
         PicBoxAvatar.TabStop = False
@@ -337,7 +337,7 @@ Partial Class Form1
         PicBoxStatus.Image = CType(resources.GetObject("PicBoxStatus.Image"), Image)
         PicBoxStatus.Location = New Point(287, 74)
         PicBoxStatus.Name = "PicBoxStatus"
-        PicBoxStatus.Size = New Size(491, 201)
+        PicBoxStatus.Size = New Size(491, 307)
         PicBoxStatus.SizeMode = PictureBoxSizeMode.CenterImage
         PicBoxStatus.TabIndex = 10
         PicBoxStatus.TabStop = False
@@ -346,6 +346,7 @@ Partial Class Form1
         ' GroupBox4
         ' 
         GroupBox4.Controls.Add(LPoints)
+        GroupBox4.Controls.Add(PicBoxAvatar)
         GroupBox4.Controls.Add(LPosition)
         GroupBox4.Controls.Add(LC2CRate)
         GroupBox4.Controls.Add(LPrivateRate)
@@ -356,7 +357,7 @@ Partial Class Form1
         GroupBox4.Dock = DockStyle.Left
         GroupBox4.Location = New Point(0, 74)
         GroupBox4.Name = "GroupBox4"
-        GroupBox4.Size = New Size(287, 233)
+        GroupBox4.Size = New Size(287, 339)
         GroupBox4.TabIndex = 6
         GroupBox4.TabStop = False
         GroupBox4.Text = "Modelinformationen"
@@ -365,7 +366,7 @@ Partial Class Form1
         ' 
         LPoints.AutoSize = True
         LPoints.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LPoints.Location = New Point(3, 166)
+        LPoints.Location = New Point(10, 303)
         LPoints.Name = "LPoints"
         LPoints.Size = New Size(68, 21)
         LPoints.TabIndex = 7
@@ -375,7 +376,7 @@ Partial Class Form1
         ' 
         LPosition.AutoSize = True
         LPosition.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LPosition.Location = New Point(3, 145)
+        LPosition.Location = New Point(10, 282)
         LPosition.Name = "LPosition"
         LPosition.Size = New Size(102, 21)
         LPosition.TabIndex = 6
@@ -385,7 +386,7 @@ Partial Class Form1
         ' 
         LC2CRate.AutoSize = True
         LC2CRate.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LC2CRate.Location = New Point(3, 124)
+        LC2CRate.Location = New Point(10, 261)
         LC2CRate.Name = "LC2CRate"
         LC2CRate.Size = New Size(43, 21)
         LC2CRate.TabIndex = 5
@@ -395,7 +396,7 @@ Partial Class Form1
         ' 
         LPrivateRate.AutoSize = True
         LPrivateRate.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LPrivateRate.Location = New Point(3, 103)
+        LPrivateRate.Location = New Point(10, 240)
         LPrivateRate.Name = "LPrivateRate"
         LPrivateRate.Size = New Size(59, 21)
         LPrivateRate.TabIndex = 4
@@ -405,7 +406,7 @@ Partial Class Form1
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        Label1.Location = New Point(3, 61)
+        Label1.Location = New Point(10, 198)
         Label1.Name = "Label1"
         Label1.Size = New Size(180, 21)
         Label1.TabIndex = 3
@@ -415,7 +416,7 @@ Partial Class Form1
         ' 
         LlModelLink.AutoSize = True
         LlModelLink.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LlModelLink.Location = New Point(3, 82)
+        LlModelLink.Location = New Point(10, 219)
         LlModelLink.Name = "LlModelLink"
         LlModelLink.Size = New Size(92, 21)
         LlModelLink.TabIndex = 2
@@ -426,7 +427,7 @@ Partial Class Form1
         ' 
         LFollower.AutoSize = True
         LFollower.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LFollower.Location = New Point(3, 40)
+        LFollower.Location = New Point(10, 177)
         LFollower.Name = "LFollower"
         LFollower.Size = New Size(22, 21)
         LFollower.TabIndex = 1
@@ -436,7 +437,7 @@ Partial Class Form1
         ' 
         LOnline.AutoSize = True
         LOnline.Font = New Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LOnline.Location = New Point(3, 19)
+        LOnline.Location = New Point(10, 156)
         LOnline.Name = "LOnline"
         LOnline.Size = New Size(22, 21)
         LOnline.TabIndex = 0
@@ -444,9 +445,11 @@ Partial Class Form1
         ' 
         ' LCurStatus
         ' 
+        LCurStatus.BackColor = Color.Black
         LCurStatus.Dock = DockStyle.Bottom
         LCurStatus.Font = New Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LCurStatus.Location = New Point(287, 275)
+        LCurStatus.ForeColor = Color.DimGray
+        LCurStatus.Location = New Point(287, 381)
         LCurStatus.Name = "LCurStatus"
         LCurStatus.Size = New Size(491, 32)
         LCurStatus.TabIndex = 1
@@ -468,9 +471,8 @@ Partial Class Form1
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = Color.DimGray
-        ClientSize = New Size(1065, 583)
+        ClientSize = New Size(1065, 689)
         Controls.Add(pnlOnlineStatus)
-        Controls.Add(PicBoxAvatar)
         Controls.Add(PicBoxStatus)
         Controls.Add(LCurStatus)
         Controls.Add(GroupBox4)
